@@ -8,6 +8,7 @@ function App() {
   const [scrollY, setScrollY] = useState(0)
   const [visibleSections, setVisibleSections] = useState({})
   const [isLoading, setIsLoading] = useState(true)
+  const [language, setLanguage] = useState('en')
 
   useEffect(() => {
     // Simulate loading time and auto-hide startup screen
@@ -39,6 +40,58 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const translations = {
+    en: {
+      heroTitle: 'Marcel Marki',
+      heroSubtitle: 'Event Pianist',
+      featuredTitle: 'Featured Performances',
+      cta: 'Discover My Journey',
+      aboutTitle: 'About Me',
+      aboutP1: 'I am a 22 year old pianist who lives close to Lucerne. I started learning piano on my own at the age of 13 and began taking lessons 5 years later.',
+      aboutP2: 'I am very open to playing different styles; I love to perform a lot, whether on stage or at open pianos.',
+      servicesTitle: 'My Expertise',
+      upcomingTitle: 'Upcoming Concerts',
+      previousTitle: 'Previous Concerts',
+      galleryTitle: 'Gallery',
+      contactTitle: "Let's Connect",
+      sendMessage: 'Send a Message',
+      schedule: 'Schedule a Consultation',
+      navAbout: 'About Me',
+      navUpcoming: 'Upcoming Concerts',
+      navPrevious: 'Previous Concerts',
+      navGallery: 'Gallery',
+      navContact: 'Contact'
+    },
+    de: {
+      heroTitle: 'Marcel Marki',
+      heroSubtitle: 'Eventpianist',
+      featuredTitle: 'Ausgewählte Auftritte',
+      cta: 'Entdecke meine Reise',
+      aboutTitle: 'Über mich',
+      aboutP1: 'Mit einer Leidenschaft für klassische Musik und zeitgenössische Kompositionen erwecke ich jedes Stück zum Leben.',
+      aboutP2: 'Jeder Auftritt ist eine Geschichte, jede Note ein Pinselstrich auf der Klangleinwand.',
+      servicesTitle: 'Meine Expertise',
+      upcomingTitle: 'Bevorstehende Konzerte',
+      previousTitle: 'Frühere Konzerte',
+      galleryTitle: 'Galerie',
+      contactTitle: 'Lass uns in Kontakt treten',
+      sendMessage: 'Nachricht senden',
+      schedule: 'Beratung vereinbaren',
+      navAbout: 'Über mich',
+      navUpcoming: 'Bevorstehende Konzerte',
+      navPrevious: 'Frühere Konzerte',
+      navGallery: 'Galerie',
+      navContact: 'Kontakt'
+    }
+  }
+
+  const t = (key) => (translations[language] && translations[language][key]) || key
+
+  const handleLanguageSelect = (lang) => {
+    setLanguage(lang)
+    setIsLoading(false)
+  }
+
   if (isLoading) {
     return (
       <div className="loading-screen">
@@ -54,9 +107,10 @@ function App() {
               <div className="key key-7"></div>
             </div>
           </div>
-          <h1 className="startup-title">Marcel Marki</h1>
-          <p className="startup-subtitle">Piano Virtuoso</p>
-          <div className="loading-bar">
+          <h1 className="startup-title">{t('heroTitle')}</h1>
+          <p className="startup-subtitle">{t('heroSubtitle')}</p>
+
+          <div className="loading-bar music-bar">
             <div className="loading-progress"></div>
           </div>
         </div>
@@ -66,13 +120,34 @@ function App() {
 
   return (
     <div className="app">
+      <header className="topbar">
+        <nav className="nav">
+          <ul className="nav-list">
+            {[{id:'about', key:'navAbout'},{id:'upcoming', key:'navUpcoming'},{id:'previous', key:'navPrevious'},{id:'gallery', key:'navGallery'},{id:'contact', key:'navContact'}].map(item => (
+              <li key={item.id} className="nav-item">
+                <button className="nav-link" onClick={() => {
+                  const el = document.querySelector(`[data-section="${item.id}"]`)
+                  if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'})
+                }}>{t(item.key)}</button>
+              </li>
+            ))}
+          </ul>
+          <div className="nav-actions">
+            <button className="nav-lang" onClick={() => setLanguage(language === 'en' ? 'de' : 'en')}>{language === 'en' ? 'DE' : 'EN'}</button>
+          </div>
+        </nav>
+      </header>
+
       {/* Hero Section with Parallax */}
       <section className="hero" style={{ transform: `translateY(${scrollY * 0.5}px)` }}>
         <div className="hero-content">
           <div className="fade-in-down">
-            <h1 className="hero-title">Marcel Marki</h1>
-            <p className="hero-subtitle">Elegance in Every Note</p>
-            <button className="cta-button">Discover My Journey</button>
+            <h1 className="hero-title">{t('heroTitle')}</h1>
+            <p className="hero-subtitle">{t('heroSubtitle')}</p>
+            <button className="cta-button" onClick={() => {
+              const el = document.querySelector('[data-section="about"]')
+              if (el) el.scrollIntoView({behavior: 'smooth'})
+            }}>{t('cta')}</button>
           </div>
         </div>
       </section>
@@ -81,14 +156,9 @@ function App() {
       <section className="about" data-section="about">
         <div className="container">
           <div className={`about-content slide-in-left ${visibleSections.about ? 'visible' : ''}`}>
-            <h2>About Me</h2>
-            <p>
-              With a passion for classical music and contemporary compositions, I bring life to every piece I perform. 
-              My journey spans years of dedicated practice and artistic exploration.
-            </p>
-            <p>
-              Each performance is a story, each note a brushstroke on the canvas of sound.
-            </p>
+            <h2>{t('aboutTitle')}</h2>
+            <p>{t('aboutP1')}</p>
+            <p>{t('aboutP2')}</p>
           </div>
           <div className={`about-image slide-in-right ${visibleSections.about ? 'visible' : ''}`}>
             <img src={img1} alt="Piano performance" className="about-img" />
@@ -99,7 +169,7 @@ function App() {
       {/* Services Section */}
       <section className="services" data-section="services">
         <div className="container">
-          <h2 className={`section-title fade-in-up ${visibleSections.services ? 'visible' : ''}`}>My Expertise</h2>
+          <h2 className={`section-title fade-in-up ${visibleSections.services ? 'visible' : ''}`}>{t('servicesTitle')}</h2>
           
           <div className="services-grid">
             <div className={`service-card fade-in-up ${visibleSections.services ? 'visible' : ''}`} style={{ animationDelay: '0.1s' }}>
@@ -126,7 +196,7 @@ function App() {
       {/* Featured Works Section */}
       <section className="featured" data-section="featured">
         <div className="container">
-          <h2 className={`section-title fade-in-up ${visibleSections.featured ? 'visible' : ''}`}>Featured Performances</h2>
+          <h2 className={`section-title fade-in-up ${visibleSections.featured ? 'visible' : ''}`}>{t('featuredTitle')}</h2>
           
           <div className="works-grid">
             {[
@@ -150,6 +220,22 @@ function App() {
         </div>
       </section>
 
+      {/* Upcoming Concerts Section */}
+      <section className="upcoming" data-section="upcoming">
+        <div className="container">
+          <h2 className={`section-title fade-in-up ${visibleSections.upcoming ? 'visible' : ''}`}>{t('upcomingTitle')}</h2>
+          <p className="center muted">{language === 'en' ? '(No upcoming concerts listed yet)' : '(Keine bevorstehenden Konzerte vorhanden)'}</p>
+        </div>
+      </section>
+
+      {/* Previous Concerts Section */}
+      <section className="previous" data-section="previous">
+        <div className="container">
+          <h2 className={`section-title fade-in-up ${visibleSections.previous ? 'visible' : ''}`}>{t('previousTitle')}</h2>
+          <p className="center muted">{language === 'en' ? '(Past concerts will appear here)' : '(Vergangene Konzerte erscheinen hier)'}</p>
+        </div>
+      </section>
+
       {/* Parallax Section */}
       <section className="parallax" style={{ backgroundPositionY: `${scrollY * 0.7}px` }}>
         <div className="parallax-content">
@@ -157,10 +243,27 @@ function App() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="testimonials" data-section="testimonials">
+        <div className="container">
+          <h2 className={`section-title fade-in-up ${visibleSections.testimonials ? 'visible' : ''}`}>Testimonials</h2>
+          <div className="testimonials-grid">
+            <div className={`testimonial-card slide-in-up ${visibleSections.testimonials ? 'visible' : ''}`}>
+              <p className="quote">“A mesmerising performance — professional and heartfelt.”</p>
+              <p className="author">— Anna S.</p>
+            </div>
+            <div className={`testimonial-card slide-in-up ${visibleSections.testimonials ? 'visible' : ''}`}>
+              <p className="quote">“Perfect for our event, very accommodating and talented.”</p>
+              <p className="author">— K. Meier</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Gallery Section */}
       <section className="gallery" data-section="gallery">
         <div className="container">
-          <h2 className={`section-title fade-in-up ${visibleSections.gallery ? 'visible' : ''}`}>Gallery</h2>
+          <h2 className={`section-title fade-in-up ${visibleSections.gallery ? 'visible' : ''}`}>{t('galleryTitle')}</h2>
           
           <div className="gallery-grid">
             {[img1, img2, img3, img1, img2, img3].map((img, i) => (
@@ -180,11 +283,11 @@ function App() {
       <section className="contact" data-section="contact">
         <div className="container">
           <div className={`contact-content fade-in-up ${visibleSections.contact ? 'visible' : ''}`}>
-            <h2>Let's Connect</h2>
-            <p>Interested in performances, collaborations, or lessons?</p>
+            <h2>{t('contactTitle')}</h2>
+            <p>{language === 'en' ? 'Interested in performances, collaborations, or lessons?' : 'Interessiert an Auftritten, Zusammenarbeit oder Unterricht?'}</p>
             <div className="contact-buttons">
-              <button className="contact-btn primary">Send a Message</button>
-              <button className="contact-btn secondary">Schedule a Consultation</button>
+              <a className="contact-btn primary" href={`mailto:hello@example.com?subject=${encodeURIComponent(language === 'en' ? 'Booking request' : 'Buchungsanfrage')}`}>{t('sendMessage')}</a>
+              <button className="contact-btn secondary" onClick={() => alert(language === 'en' ? 'To schedule, please email hello@example.com' : 'Um zu buchen, senden Sie bitte eine E-Mail an hello@example.com')}>{t('schedule')}</button>
             </div>
             <div className="social-links">
               <a href="#" className="social-link">Instagram</a>
