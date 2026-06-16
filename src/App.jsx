@@ -1,9 +1,22 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import img1 from './assets/1D29431A-DB86-4AD8-BC40-D65F2E59666A.JPG'
+import img2 from './assets/20b48e7f-9b09-4956-ac8c-d47865580434.JPG'
+import img3 from './assets/DSC02666.JPEG'
 
 function App() {
   const [scrollY, setScrollY] = useState(0)
   const [visibleSections, setVisibleSections] = useState({})
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Simulate loading time and auto-hide startup screen
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 3500)
+
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,13 +39,38 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  if (isLoading) {
+    return (
+      <div className="loading-screen">
+        <div className="startup-container">
+          <div className="logo-animation">
+            <div className="piano-keys">
+              <div className="key key-1"></div>
+              <div className="key key-2"></div>
+              <div className="key key-3"></div>
+              <div className="key key-4"></div>
+              <div className="key key-5"></div>
+              <div className="key key-6"></div>
+              <div className="key key-7"></div>
+            </div>
+          </div>
+          <h1 className="startup-title">Marcel Marki</h1>
+          <p className="startup-subtitle">Piano Virtuoso</p>
+          <div className="loading-bar">
+            <div className="loading-progress"></div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="app">
       {/* Hero Section with Parallax */}
       <section className="hero" style={{ transform: `translateY(${scrollY * 0.5}px)` }}>
         <div className="hero-content">
           <div className="fade-in-down">
-            <h1 className="hero-title">Piano</h1>
+            <h1 className="hero-title">Marcel Marki</h1>
             <p className="hero-subtitle">Elegance in Every Note</p>
             <button className="cta-button">Discover My Journey</button>
           </div>
@@ -53,9 +91,7 @@ function App() {
             </p>
           </div>
           <div className={`about-image slide-in-right ${visibleSections.about ? 'visible' : ''}`}>
-            <div className="image-placeholder">
-              <span>🎹</span>
-            </div>
+            <img src={img1} alt="Piano performance" className="about-img" />
           </div>
         </div>
       </section>
@@ -93,16 +129,20 @@ function App() {
           <h2 className={`section-title fade-in-up ${visibleSections.featured ? 'visible' : ''}`}>Featured Performances</h2>
           
           <div className="works-grid">
-            {['Moonlight Sonata', 'Les Misérables', 'River Flows in You'].map((work, index) => (
+            {[
+              { title: 'Moonlight Sonata', img: img1 },
+              { title: 'Les Misérables', img: img2 },
+              { title: 'River Flows in You', img: img3 }
+            ].map((work, index) => (
               <div 
                 key={index}
-                className={`work-card zoom-in ${visibleSections.featured ? 'visible' : ''}`}
+                className={`work-card zoom-in hover-lift ${visibleSections.featured ? 'visible' : ''}`}
                 style={{ animationDelay: `${index * 0.15}s` }}
               >
                 <div className="work-image">
-                  <span>🎹</span>
+                  <img src={work.img} alt={work.title} className="work-img" />
                 </div>
-                <h3>{work}</h3>
+                <h3>{work.title}</h3>
                 <p>An exquisite performance</p>
               </div>
             ))}
@@ -123,13 +163,13 @@ function App() {
           <h2 className={`section-title fade-in-up ${visibleSections.gallery ? 'visible' : ''}`}>Gallery</h2>
           
           <div className="gallery-grid">
-            {Array.from({ length: 6 }).map((_, i) => (
+            {[img1, img2, img3, img1, img2, img3].map((img, i) => (
               <div 
                 key={i}
-                className={`gallery-item slide-in-up ${visibleSections.gallery ? 'visible' : ''}`}
+                className={`gallery-item slide-in-up hover-scale ${visibleSections.gallery ? 'visible' : ''}`}
                 style={{ animationDelay: `${i * 0.1}s` }}
               >
-                <div className="gallery-placeholder">🎹</div>
+                <img src={img} alt={`Gallery item ${i + 1}`} className="gallery-img" />
               </div>
             ))}
           </div>
