@@ -1,16 +1,98 @@
-# React + Vite
+# 🎹 Piano Portfolio Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A luxurious, professional personal piano portfolio website built with React and Vite. Features elegant design, parallax effects, and smooth scroll animations.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Elegant Design** - Luxury aesthetic with gold accents and modern typography
+- **Parallax Effects** - Smooth background parallax as you scroll
+- **Scroll Animations** - Fade-in, slide-in, and zoom effects on sections
+- **Responsive Design** - Fully mobile-friendly interface
+- **Fast Performance** - Optimized Vite build with minimal bundle size
+- **Github Pages Ready** - Pre-configured for static deployment
 
-## React Compiler
+## 🚀 Quick Start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
 
-## Expanding the ESLint configuration
+### Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+### Production Build
+
+```bash
+# Build for production
+npm run build
+
+# Preview the production build
+npm run preview
+```
+
+## 📦 Sections
+
+- **Hero** - Eye-catching introduction with parallax effect
+- **About** - Personal background and passion for music
+- **Services** - Expertise areas (Classical Performance, Contemporary Fusion, Instruction)
+- **Featured Works** - Showcase of notable performances
+- **Parallax Quote** - Inspirational quote with fixed background
+- **Gallery** - Visual gallery of performances
+- **Contact** - Call-to-action for bookings and inquiries
+
+## 🌐 Github Pages Setup
+
+**Your site is configured to deploy to**: `https://eengamer.github.io/Piano-Website/`
+
+For detailed setup instructions, see [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md)
+
+### Quick Deploy (Using Github Actions)
+
+1. Go to repository **Settings** → **Pages**
+2. Set **Source** to "Github Actions"
+3. A workflow will automatically deploy on every push to main
+
+### Manual Deploy
+
+```bash
+npm run build
+npm run deploy
+```
+
+## 🎨 Customization
+
+- Edit content in `src/App.jsx`
+- Modify styles in `src/App.css`
+- Update colors in CSS custom properties (`:root` section)
+
+## 📁 Project Structure
+
+```
+Piano-Website/
+├── src/
+│   ├── App.jsx          # Main component
+│   ├── App.css          # Styling
+│   ├── main.jsx         # Entry point
+│   └── index.css        # Global styles
+├── dist/                # Production build
+├── public/              # Static files
+├── vite.config.js       # Vite configuration
+└── README.md            # Documentation
+```
+
+## ⚡ Performance
+
+- HTML: ~0.57 KB (gzipped)
+- CSS: ~2.74 KB (gzipped)
+- JS: ~61.36 KB (gzipped)
+
+## 🐛 Support
+
+For detailed troubleshooting and deployment help, see [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md)
