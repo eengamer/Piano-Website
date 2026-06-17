@@ -1,10 +1,20 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import img1 from './assets/1D29431A-DB86-4AD8-BC40-D65F2E59666A.JPG'
 import img2 from './assets/20b48e7f-9b09-4956-ac8c-d47865580434.JPG'
+import img1 from './assets/1D29431A-DB86-4AD8-BC40-D65F2E59666A.JPG'
 import img3 from './assets/DSC02666.JPEG'
 import bgPiano from './assets/blackwhitepiano.jpg'
 import amantelogo from './assets/amante Bern.png'
+import imgKKL from './assets/KKLopenpiano.jpg'
+import imgBridge from './assets/BRIDGEopenpianonights.jpg'
+import imgSwiss from './assets/Swissarbeitgeber.JPG'
+import imgSamigo from './assets/SAMIGO SUNSET.webp'
+import imgKKLLogo from './assets/KKL logo.png'
+import imgSwissLogo from './assets/Swiss arbeit geber awardshow logo.webp'
+import imgBernCityPiano from './assets/BernCityPiano2.jpg'
+import imgLoebLogo from './assets/loeb logo.png'
+import imgWedding from './assets/wedding.webp'
+import imgBirthday from './assets/birthday.avif'
 
 const FLOATING_NOTES = ['♩','♪','♫','♬','♩','♪','♫','♬']
 const SITE_OWNER = 'Marcel Marki'
@@ -445,6 +455,10 @@ function App() {
   const [navScrolled, setNavScrolled]       = useState(false)
   const [showModal, setShowModal]           = useState(false)
   const [pageKey, setPageKey]               = useState(() => getPathKey(window.location.pathname))
+  const [perfDropdown, setPerfDropdown]     = useState(false)
+  const [showAllUpcoming, setShowAllUpcoming] = useState(false)
+  const [showAllPast, setShowAllPast]       = useState(false)
+  const [showAllGallery, setShowAllGallery] = useState(false)
   const isLegalPage = pageKey !== 'home'
 
   useEffect(() => {
@@ -495,10 +509,11 @@ function App() {
       /* nav */
       navAbout:          'About',
       navServices:       'Services',
-      navFeatured:       'Performances',
+      navPerformances:   'Performances',
+      navFeatured:       'Featured',
+      navUpcoming:       'Upcoming Events',
+      navPrevious:       'Past Events',
       navTestimonials:   'Testimonials',
-      navUpcoming:       'Upcoming',
-      navPrevious:       'Previous',
       navGallery:        'Gallery',
       navContact:        'Contact',
       /* about */
@@ -518,14 +533,17 @@ function App() {
       svc3Desc:          'Professional live piano entertainment for weddings, corporate events, receptions, private celebrations, and exclusive gatherings.',
       /* featured */
       featuredTitle:     'Featured Performances',
-      /* concerts */
-      upcomingTitle:     'Upcoming Concerts',
-      noUpcoming:        'No upcoming concerts listed yet — check back soon.',
-      previousTitle:     'Previous Concerts',
-      noPrevious:        'Past concerts will appear here.',
+      /* events */
+      upcomingTitle:     'Upcoming Events',
+      previousTitle:     'Past Events',
+      featuredTitle:     'Featured Performances',
       eventVenueAmante:  'Amante, Belp',
       eventOpenTo:       'Open to everyone',
       eventDiningDesc:   'Join us for an intimate dining evening where I will be performing live piano background music throughout the night. A wonderful opportunity to enjoy fine dining accompanied by live music in a warm, welcoming atmosphere.',
+      eventSamigoDesc:   'Teaming up with the DJ to bring a spark of live piano into the latin world — a unique fusion of latin rhythms and live piano keys for an unforgettable day and night experience.',
+      eventSamigoTickets:'Get Tickets',
+      showMore:          'Show More',
+      showLess:          'Show Less',
       /* parallax */
       parallaxQuote:     '"Music is the language of the soul"',
       /* testimonials */
@@ -577,10 +595,11 @@ function App() {
       /* nav */
       navAbout:          'Über mich',
       navServices:       'Leistungen',
-      navFeatured:       'Auftritte',
+      navPerformances:   'Auftritte',
+      navFeatured:       'Highlights',
+      navUpcoming:       'Kommende Events',
+      navPrevious:       'Vergangene Events',
       navTestimonials:   'Stimmen',
-      navUpcoming:       'Konzerte',
-      navPrevious:       'Früher',
       navGallery:        'Galerie',
       navContact:        'Kontakt',
       /* about */
@@ -600,14 +619,17 @@ function App() {
       svc3Desc:          'Professionelle Live-Klavierunterhaltung für Hochzeiten, Firmenevents, Empfänge, private Feiern und exklusive Veranstaltungen.',
       /* featured */
       featuredTitle:     'Ausgewählte Auftritte',
-      /* concerts */
-      upcomingTitle:     'Bevorstehende Konzerte',
-      noUpcoming:        'Noch keine bevorstehenden Konzerte — bald mehr.',
-      previousTitle:     'Frühere Konzerte',
-      noPrevious:        'Vergangene Konzerte erscheinen hier.',
+      /* events */
+      upcomingTitle:     'Kommende Events',
+      previousTitle:     'Vergangene Events',
+      featuredTitle:     'Ausgewählte Auftritte',
       eventVenueAmante:  'Amante, Belp',
       eventOpenTo:       'Offen für alle',
       eventDiningDesc:   'Begleiten Sie uns an einem stimmungsvollen Dinerabend, bei dem ich live Hintergrundmusik auf dem Klavier spielen werde. Eine wunderbare Gelegenheit, ein feines Dinner mit Live-Klaviermusik in einer einladenden Atmosphäre zu geniessen.',
+      eventSamigoDesc:   'Gemeinsam mit dem DJ bringe ich einen Funken Live-Klavier in die lateinamerikanische Welt — eine einzigartige Fusion aus Latin-Rhythmen und Live-Piano für ein unvergessliches Tag- und Nachterlebnis.',
+      eventSamigoTickets:'Tickets kaufen',
+      showMore:          'Mehr anzeigen',
+      showLess:          'Weniger anzeigen',
       /* parallax */
       parallaxQuote:     '„Musik ist die Sprache der Seele"',
       /* testimonials */
@@ -660,15 +682,16 @@ function App() {
     setPageKey(targetKey)
   }
 
+  const getScrollTarget = (id) =>
+    document.querySelector(`[data-section="${id}"]`) || document.getElementById(id)
+
   const scrollTo = (id) => {
     if (isLegalPage) {
       navigate('/')
-      window.setTimeout(() => {
-        document.querySelector(`[data-section="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 0)
+      window.setTimeout(() => getScrollTarget(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 0)
       return
     }
-    document.querySelector(`[data-section="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    getScrollTarget(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   /* ── Loading screen ── */
@@ -704,10 +727,15 @@ function App() {
   const NAV_ITEMS = [
     { id: 'about',        key: 'navAbout' },
     { id: 'services',     key: 'navServices' },
-    { id: 'featured',     key: 'navFeatured' },
+    {
+      id: 'perf-featured', key: 'navPerformances',
+      dropdown: [
+        { id: 'perf-featured',  key: 'navFeatured' },
+        { id: 'perf-upcoming',  key: 'navUpcoming' },
+        { id: 'perf-previous',  key: 'navPrevious' },
+      ]
+    },
     { id: 'testimonials', key: 'navTestimonials' },
-    { id: 'upcoming',     key: 'navUpcoming' },
-    { id: 'previous',     key: 'navPrevious' },
     { id: 'gallery',      key: 'navGallery' },
     { id: 'contact',      key: 'navContact' },
   ]
@@ -733,11 +761,30 @@ function App() {
           </span>
           <ul className="nav-list">
             {NAV_ITEMS.map((item, idx) => (
-              <li key={item.id} className="nav-item">
+              <li
+                key={item.id}
+                className={`nav-item${item.dropdown ? ' nav-has-dropdown' : ''}`}
+                onMouseEnter={item.dropdown ? () => setPerfDropdown(true) : undefined}
+                onMouseLeave={item.dropdown ? () => setPerfDropdown(false) : undefined}
+              >
                 {idx > 0 && <span className="nav-divider" aria-hidden="true" />}
                 <button className="nav-link" onClick={() => scrollTo(item.id)}>
-                  {t(item.key)}
+                  {t(item.key)}{item.dropdown && <span className="nav-caret" aria-hidden="true">▾</span>}
                 </button>
+                {item.dropdown && perfDropdown && (
+                  <div className="nav-dropdown" role="menu">
+                    {item.dropdown.map(sub => (
+                      <button
+                        key={sub.id}
+                        className="nav-dropdown-item"
+                        role="menuitem"
+                        onClick={() => { scrollTo(sub.id); setPerfDropdown(false) }}
+                      >
+                        {t(sub.key)}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -821,7 +868,7 @@ function App() {
           </div>
           <div className={`about-image slide-in-right ${visibleSections.about ? 'visible' : ''}`}>
             <div className="image-frame">
-              <img src={img1} alt="Piano performance" className="about-img" />
+              <img src={img2} alt="Piano performance" className="about-img" />
             </div>
           </div>
         </div>
@@ -836,9 +883,37 @@ function App() {
           <div className={`section-underline centered fade-in-up ${visibleSections.services ? 'visible' : ''}`} />
           <div className="services-grid">
             {[
-              { icon: '🎹', tKey: 'svc1' },
-              { icon: '🎼', tKey: 'svc2' },
-              { icon: '✨', tKey: 'svc3' },
+              {
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9 18V5l12-2v13"/>
+                    <circle cx="6" cy="18" r="3"/>
+                    <circle cx="18" cy="16" r="3"/>
+                  </svg>
+                ),
+                tKey: 'svc1'
+              },
+              {
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/>
+                    <polyline points="14,2 14,8 20,8"/>
+                    <line x1="9" y1="13" x2="15" y2="13"/>
+                    <line x1="9" y1="17" x2="12" y2="17"/>
+                    <path d="M14 13v3.5a1.5 1.5 0 0 0 3 0V13h-3z"/>
+                    <line x1="17" y1="13" x2="17" y2="16.5"/>
+                  </svg>
+                ),
+                tKey: 'svc2'
+              },
+              {
+                icon: (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                  </svg>
+                ),
+                tKey: 'svc3'
+              },
             ].map((s, i) => (
               <div
                 key={i}
@@ -854,85 +929,207 @@ function App() {
         </div>
       </section>
 
-      {/* ── Featured ── */}
-      <section className="featured" data-section="featured">
-        <div className="section-wrap">
-          <h2 className={`section-title fade-in-up ${visibleSections.featured ? 'visible' : ''}`}>
-            {t('featuredTitle')}
-          </h2>
-          <div className={`section-underline centered fade-in-up ${visibleSections.featured ? 'visible' : ''}`} />
-          <div className="works-grid">
-            {[
-              { title: 'Moonlight Sonata',    composer: 'L. v. Beethoven', img: img1 },
-              { title: 'Les Misérables',       composer: 'C. M. Schönberg', img: img2 },
-              { title: 'River Flows in You',  composer: 'Yiruma',           img: img3 },
-            ].map((work, i) => (
-              <div
-                key={i}
-                className={`work-card zoom-in ${visibleSections.featured ? 'visible' : ''}`}
-                style={{ animationDelay: `${i * 0.15}s` }}
-              >
-                <div className="work-image">
-                  <img src={work.img} alt={work.title} className="work-img" />
-                  <div className="work-overlay">
-                    <span className="work-overlay-note">♪</span>
+      {/* ── Performances (Featured + Upcoming + Past) ── */}
+      <div className="performances-section">
+
+        {/* Featured */}
+        <div id="perf-featured" data-section="perf-featured" className="perf-sub">
+          <div className="section-wrap">
+            <h2 className={`section-title fade-in-up ${visibleSections['perf-featured'] ? 'visible' : ''}`}>
+              {t('featuredTitle')}
+            </h2>
+            <div className={`section-underline centered fade-in-up ${visibleSections['perf-featured'] ? 'visible' : ''}`} />
+            <div className="works-grid">
+              {[
+                { title: 'KKL Open Piano Night',          subtitle: 'Sara Anna Walser & Marcel Marki', img: imgKKL },
+                { title: 'BRIDGE Zürich Piano Nights',    subtitle: 'Marcel Marki',                    img: imgBridge },
+                { title: 'Swiss Arbeitgeber Award Show',  subtitle: 'Sara Anna Walser & Marcel Marki', img: imgSwiss },
+              ].map((work, i) => (
+                <div
+                  key={i}
+                  className={`work-card zoom-in ${visibleSections['perf-featured'] ? 'visible' : ''}`}
+                  style={{ animationDelay: `${i * 0.15}s` }}
+                >
+                  <div className="work-image">
+                    <img src={work.img} alt={work.title} className="work-img" />
+                    <div className="work-overlay"><span className="work-overlay-note">♪</span></div>
+                  </div>
+                  <div className="work-info">
+                    <h3>{work.title}</h3>
+                    <p>{work.subtitle}</p>
                   </div>
                 </div>
-                <div className="work-info">
-                  <h3>{work.title}</h3>
-                  <p>{work.composer}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </section>
 
-      {/* ── Upcoming ── */}
-      <section className="upcoming" data-section="upcoming">
-        <div className="section-wrap">
-          <h2 className={`section-title fade-in-up ${visibleSections.upcoming ? 'visible' : ''}`}>
-            {t('upcomingTitle')}
-          </h2>
-          <div className={`section-underline centered fade-in-up ${visibleSections.upcoming ? 'visible' : ''}`} />
-          <div className="events-grid">
-            {[
-              { date: language === 'de' ? 'Dienstag, 10. November 2026' : 'Tuesday, 10 November 2026', time: '18:00 – 21:00' },
-              { date: language === 'de' ? 'Dienstag, 22. Dezember 2026' : 'Tuesday, 22 December 2026',  time: '18:00 – 21:00' },
-            ].map((ev, i) => (
-              <div
-                key={i}
-                className={`event-card fade-in-up ${visibleSections.upcoming ? 'visible' : ''}`}
-                style={{ animationDelay: `${0.1 + i * 0.18}s` }}
-              >
-                <div className="event-venue-logo">
-                  <img src={amantelogo} alt="Amante Belp" className="amante-logo" />
-                </div>
-                <div className="event-body">
-                  <div className="event-meta">
-                    <span className="event-date">{ev.date}</span>
-                    <span className="event-time">{ev.time}</span>
+        {/* Upcoming + Past Events (auto-migration) */}
+        {(() => {
+          const de = language === 'de'
+          const today = new Date(); today.setHours(0, 0, 0, 0)
+
+          const upcomingDefs = [
+            {
+              isoDate: '2026-06-26',
+              pastTitle: de ? 'Private Hochzeit' : 'Private Wedding', pastLogo: imgWedding, pastLogoDark: false, pastVenue: '',
+              type: 'logo', logo: imgWedding, logoAlt: 'Wedding', logoLight: true,
+              date: de ? 'Freitag, 26. Juni 2026' : 'Friday, 26 June 2026',
+              time: de ? 'Privat' : 'Private',
+              venue: de ? 'Private Hochzeit' : 'Private Wedding',
+              desc: de ? 'Ein unvergesslicher Abend mit live Klaviermusik für einen besonderen Hochzeitstag.' : 'An unforgettable evening of live piano music for a very special wedding day.',
+            },
+            {
+              isoDate: '2026-06-27',
+              pastTitle: 'Latin Sunset @ SAMIGO', pastLogo: null, pastLogoDark: false, pastVenue: 'Samigo',
+              type: 'image', img: imgSamigo, imgAlt: 'Latin Sunset @ Samigo',
+              date: de ? 'Samstag, 27. Juni 2026' : 'Saturday, 27 June 2026',
+              time: de ? 'Tag & Nacht' : 'Day & Night',
+              venue: 'Samigo',
+              desc: t('eventSamigoDesc'),
+              ticketUrl: 'https://eventfrog.ch/de/p/partys/latin-brasil/latin-sunset-day-and-nightparty-samigo-7467879824339538144.html',
+              ticketLabel: t('eventSamigoTickets'),
+            },
+            {
+              isoDate: '2026-07-10',
+              pastTitle: de ? 'Private Hochzeit' : 'Private Wedding', pastLogo: imgWedding, pastLogoDark: false, pastVenue: '',
+              type: 'logo', logo: imgWedding, logoAlt: 'Wedding', logoLight: true,
+              date: de ? 'Freitag, 10. Juli 2026' : 'Friday, 10 July 2026',
+              time: de ? 'Privat' : 'Private',
+              venue: de ? 'Private Hochzeit' : 'Private Wedding',
+              desc: de ? 'Ein unvergesslicher Abend mit live Klaviermusik für einen besonderen Hochzeitstag.' : 'An unforgettable evening of live piano music for a very special wedding day.',
+            },
+            {
+              isoDate: '2026-11-10',
+              pastTitle: de ? 'Amante Belp Dining Evening' : 'Amante Belp Dining Evening', pastLogo: amantelogo, pastLogoDark: false, pastVenue: 'Amante Belp',
+              type: 'logo', logo: amantelogo, logoAlt: 'Amante Belp', logoLight: true,
+              date: de ? 'Dienstag, 10. November 2026' : 'Tuesday, 10 November 2026',
+              time: '18:00 – 21:00', venue: t('eventVenueAmante'),
+              desc: t('eventDiningDesc'), badge: t('eventOpenTo'),
+            },
+            {
+              isoDate: '2026-12-22',
+              pastTitle: de ? 'Amante Belp Dining Evening' : 'Amante Belp Dining Evening', pastLogo: amantelogo, pastLogoDark: false, pastVenue: 'Amante Belp',
+              type: 'logo', logo: amantelogo, logoAlt: 'Amante Belp', logoLight: true,
+              date: de ? 'Dienstag, 22. Dezember 2026' : 'Tuesday, 22 December 2026',
+              time: '18:00 – 21:00', venue: t('eventVenueAmante'),
+              desc: t('eventDiningDesc'), badge: t('eventOpenTo'),
+            },
+          ]
+
+          const allUpcoming = upcomingDefs.filter(ev => new Date(ev.isoDate) >= today)
+          const autoMigrated = upcomingDefs
+            .filter(ev => new Date(ev.isoDate) < today)
+            .sort((a, b) => new Date(b.isoDate) - new Date(a.isoDate))
+            .map(ev => ({ isoDate: ev.isoDate, date: ev.date, title: ev.pastTitle, venue: ev.pastVenue, logo: ev.pastLogo, logoDark: ev.pastLogoDark }))
+
+          const staticPast = [
+            { isoDate: '2026-02-07', date: de ? '7. Februar 2026'   : 'February 7, 2026',   title: 'Piano Moments im Café des Artistes',    venue: 'Bern City Piano', logo: imgBernCityPiano, logoDark: true  },
+            { isoDate: '2026-01-15', date: de ? '15. Januar 2026'   : 'January 15, 2026',   title: 'Swiss Arbeitgeber Award Show',           venue: '',                logo: imgSwissLogo,     logoDark: false },
+            { isoDate: '2026-01-11', date: de ? '11. Januar 2026'   : 'January 11, 2026',   title: 'KKL Open Piano Night',                   venue: 'KKL Luzern',      logo: imgKKLLogo,       logoDark: false },
+            { isoDate: '2025-12-27', date: de ? '27. Dezember 2025' : 'December 27, 2025',  title: 'Loeb Open Piano Moments',                venue: 'Loeb, Bern',      logo: imgLoebLogo,      logoDark: false },
+            { isoDate: '2025-12-21', date: de ? '21. Dezember 2025' : 'December 21, 2025',  title: 'Loeb Open Piano Moments',                venue: 'Loeb, Bern',      logo: imgLoebLogo,      logoDark: false },
+            { isoDate: '2025-09-13', date: de ? '13. September 2025': 'September 13, 2025', title: de ? 'Privater Geburtstag' : 'Private Birthday', venue: '',          logo: imgBirthday,      logoDark: false },
+            { isoDate: '2025-08-16', date: de ? '16. August 2025'   : 'August 16, 2025',    title: de ? 'Private Hochzeit' : 'Private Wedding', venue: '',             logo: imgWedding,       logoDark: false },
+          ]
+
+          const allPast = [...autoMigrated, ...staticPast].sort((a, b) => new Date(b.isoDate) - new Date(a.isoDate))
+
+          const visibleUpcoming = showAllUpcoming ? allUpcoming : allUpcoming.slice(0, 2)
+          const visiblePast     = showAllPast     ? allPast     : allPast.slice(0, 3)
+
+          return (
+            <>
+              <div id="perf-upcoming" data-section="perf-upcoming" className="perf-sub perf-sub--alt">
+                <div className="section-wrap">
+                  <h2 className={`section-title fade-in-up ${visibleSections['perf-upcoming'] ? 'visible' : ''}`}>
+                    {t('upcomingTitle')}
+                  </h2>
+                  <div className={`section-underline centered fade-in-up ${visibleSections['perf-upcoming'] ? 'visible' : ''}`} />
+                  <div className="events-grid">
+                    {visibleUpcoming.map((ev, i) => (
+                      <div
+                        key={i}
+                        className={`event-card${ev.type === 'image' ? ' event-card--image' : ''} fade-in-up ${visibleSections['perf-upcoming'] ? 'visible' : ''}`}
+                        style={{ animationDelay: `${0.1 + i * 0.18}s` }}
+                      >
+                        {ev.type === 'image' ? (
+                          <div className="event-img-header">
+                            <img src={ev.img} alt={ev.imgAlt} />
+                          </div>
+                        ) : (
+                          <div className={`event-venue-logo${ev.logoLight ? '' : ' event-venue-logo--dark'}`}>
+                            <img src={ev.logo} alt={ev.logoAlt} className="amante-logo" />
+                          </div>
+                        )}
+                        <div className="event-body">
+                          <div className="event-meta">
+                            <span className="event-date">{ev.date}</span>
+                            <span className="event-time">{ev.time}</span>
+                          </div>
+                          <p className="event-venue-name">{ev.venue}</p>
+                          <p className="event-desc">{ev.desc}</p>
+                          {ev.ticketUrl && (
+                            <a href={ev.ticketUrl} target="_blank" rel="noopener noreferrer" className="event-ticket-link">
+                              🎟 {ev.ticketLabel}
+                            </a>
+                          )}
+                          {ev.badge && <span className="event-badge">{ev.badge}</span>}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <p className="event-venue-name">{t('eventVenueAmante')}</p>
-                  <p className="event-desc">{t('eventDiningDesc')}</p>
-                  <span className="event-badge">{t('eventOpenTo')}</span>
+                  {allUpcoming.length > 2 && (
+                    <div className="show-more-wrap">
+                      <button className="show-more-btn" onClick={() => setShowAllUpcoming(v => !v)}>
+                        {showAllUpcoming ? t('showLess') : t('showMore')} {showAllUpcoming ? '▲' : '▼'}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* ── Previous ── */}
-      <section className="previous" data-section="previous">
-        <div className="section-wrap">
-          <h2 className={`section-title fade-in-up ${visibleSections.previous ? 'visible' : ''}`}>
-            {t('previousTitle')}
-          </h2>
-          <div className={`section-underline centered fade-in-up ${visibleSections.previous ? 'visible' : ''}`} />
-          <p className="center muted">{t('noPrevious')}</p>
-        </div>
-      </section>
+              <div id="perf-previous" data-section="perf-previous" className="perf-sub">
+                <div className="section-wrap">
+                  <h2 className={`section-title fade-in-up ${visibleSections['perf-previous'] ? 'visible' : ''}`}>
+                    {t('previousTitle')}
+                  </h2>
+                  <div className={`section-underline centered fade-in-up ${visibleSections['perf-previous'] ? 'visible' : ''}`} />
+                  <div className="past-grid">
+                    {visiblePast.map((ev, i) => (
+                      <div
+                        key={i}
+                        className={`past-card fade-in-up ${visibleSections['perf-previous'] ? 'visible' : ''}`}
+                        style={{ animationDelay: `${0.08 * i}s` }}
+                      >
+                        <div className={`past-logo-wrap${ev.logo ? (ev.logoDark ? ' past-logo-wrap--dark' : ' past-logo-wrap--light') : ' past-logo-wrap--none'}`}>
+                          {ev.logo
+                            ? <img src={ev.logo} alt={ev.title} className="past-logo" />
+                            : <span className="past-placeholder">♪</span>
+                          }
+                        </div>
+                        <div className="past-info">
+                          <p className="past-date">{ev.date}</p>
+                          <p className="past-title">{ev.title}</p>
+                          {ev.venue && <p className="past-venue">{ev.venue}</p>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {allPast.length > 3 && (
+                    <div className="show-more-wrap">
+                      <button className="show-more-btn" onClick={() => setShowAllPast(v => !v)}>
+                        {showAllPast ? t('showLess') : t('showMore')} {showAllPast ? '▲' : '▼'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )
+        })()}
+
+      </div>
 
       {/* ── Parallax quote ── */}
       <section className="parallax" style={{ backgroundPositionY: `${scrollY * 0.5}px` }}>
@@ -976,18 +1173,40 @@ function App() {
             {t('galleryTitle')}
           </h2>
           <div className={`section-underline centered fade-in-up ${visibleSections.gallery ? 'visible' : ''}`} />
-          <div className="gallery-grid">
-            {[img1, img2, img3, img1, img2, img3].map((img, i) => (
-              <div
-                key={i}
-                className={`gallery-item slide-in-up ${visibleSections.gallery ? 'visible' : ''}`}
-                style={{ animationDelay: `${i * 0.08}s` }}
-              >
-                <img src={img} alt={`Gallery ${i + 1}`} className="gallery-img" />
-                <div className="gallery-overlay" />
-              </div>
-            ))}
-          </div>
+          {(() => {
+            const allPhotos = [
+              { src: img1,            alt: 'Marcel Marki – Live Performance' },
+              { src: imgKKL,          alt: 'KKL Open Piano Night' },
+              { src: img2,            alt: 'Marcel Marki – Piano' },
+              { src: imgBridge,       alt: 'BRIDGE Zürich Piano Nights' },
+              { src: img3,            alt: 'Marcel Marki – Concert' },
+              { src: imgSwiss,        alt: 'Swiss Arbeitgeber Award Show' },
+              { src: imgBernCityPiano,alt: 'Bern City Piano – Café des Artistes' },
+              { src: imgSamigo,       alt: 'Latin Sunset @ SAMIGO' },
+            ]
+            const visible = showAllGallery ? allPhotos : allPhotos.slice(0, 4)
+            return (
+              <>
+                <div className="gallery-grid">
+                  {visible.map((photo, i) => (
+                    <div
+                      key={i}
+                      className={`gallery-item slide-in-up ${visibleSections.gallery ? 'visible' : ''}`}
+                      style={{ animationDelay: `${i * 0.08}s` }}
+                    >
+                      <img src={photo.src} alt={photo.alt} className="gallery-img" />
+                      <div className="gallery-overlay" />
+                    </div>
+                  ))}
+                </div>
+                <div className="show-more-wrap">
+                  <button className="show-more-btn" onClick={() => setShowAllGallery(v => !v)}>
+                    {showAllGallery ? t('showLess') : t('showMore')} {showAllGallery ? '▲' : '▼'}
+                  </button>
+                </div>
+              </>
+            )
+          })()}
         </div>
       </section>
 
@@ -1017,7 +1236,7 @@ function App() {
               </a>
             </div>
             <div className="social-links">
-              <a href="#" className="social-link" aria-label="Instagram">
+              <a href="https://www.instagram.com/marcel_marki?igsh=MWxucGZocW53YmRoaw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Instagram">
                 <svg className="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
                   <circle cx="12" cy="12" r="4"/>
