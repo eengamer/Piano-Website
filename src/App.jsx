@@ -3,305 +3,1061 @@ import './App.css'
 import img1 from './assets/1D29431A-DB86-4AD8-BC40-D65F2E59666A.JPG'
 import img2 from './assets/20b48e7f-9b09-4956-ac8c-d47865580434.JPG'
 import img3 from './assets/DSC02666.JPEG'
+import bgPiano from './assets/blackwhitepiano.jpg'
+import amantelogo from './assets/amante Bern.png'
 
+const FLOATING_NOTES = ['♩','♪','♫','♬','♩','♪','♫','♬']
+const SITE_OWNER = 'Marcel Marki'
+const CONTACT_EMAIL = 'event@marcel-marki.com'
+const SITE_DOMAIN = 'marcel-marki.com'
+
+const PAGE_META = {
+  home: {
+    title: 'Marcel Marki | Event Pianist',
+    description: 'Personal and professional website of Marcel Marki, showcasing piano performances, arrangements, recordings, videos, photographs, and booking inquiries.',
+  },
+  terms: {
+    title: 'Terms & Conditions | Marcel Marki',
+    description: 'Terms and conditions for marcel-marki.com, including intellectual property rights, permitted use, scraping and AI training restrictions, liability, and Swiss governing law.',
+  },
+  privacy: {
+    title: 'Privacy Policy | Marcel Marki',
+    description: 'Privacy policy for marcel-marki.com, explaining contact inquiries, technical data, cookies, third-party services, user rights, retention, and security.',
+  },
+  impressum: {
+    title: 'Impressum | Marcel Marki',
+    description: 'Legal notice for marcel-marki.com with website owner, contact information, content responsibility, copyright, and external links disclaimer.',
+  },
+}
+
+const LEGAL_LINKS = [
+  { path: '/privacy', label: 'Privacy Policy' },
+  { path: '/terms', label: 'Terms & Conditions' },
+  { path: '/impressum', label: 'Impressum' },
+]
+
+const LEGAL_PAGES = {
+  terms: {
+    eyebrow: 'Legal',
+    title: 'Terms & Conditions',
+    updated: 'Last updated: 2026',
+    intro: `These Terms & Conditions govern the use of ${SITE_DOMAIN}, the personal and professional website of ${SITE_OWNER}. By accessing this website, you agree to use it only in accordance with these Terms.`,
+    sections: [
+      {
+        title: 'Website Purpose',
+        body: [
+          'This website showcases piano performances, musical arrangements, recordings, videos, photographs, and related professional information, and allows visitors to contact Marcel Marki for bookings and inquiries.',
+        ],
+      },
+      {
+        title: 'Intellectual Property',
+        body: [
+          `All website content is the exclusive intellectual property of ${SITE_OWNER}, unless expressly stated otherwise.`,
+          'Protected content includes, but is not limited to, musical arrangements, performances, recordings, videos, photographs, images, graphics, logos, text, designs, source code, and downloadable materials.',
+          `No content may be copied, reproduced, redistributed, modified, republished, sold, licensed, publicly performed, commercially exploited, or otherwise used without the prior written permission of ${SITE_OWNER}.`,
+        ],
+      },
+      {
+        title: 'Automated Collection And AI Use',
+        body: [
+          `Automated scraping, downloading, AI training, machine learning dataset creation, indexing for generative AI systems, or mass collection of website content is strictly prohibited without explicit written consent from ${SITE_OWNER}.`,
+        ],
+      },
+      {
+        title: 'Permitted Use',
+        body: [
+          'Users may access this website for personal and non-commercial purposes only. Any use beyond ordinary website viewing requires prior written permission.',
+        ],
+      },
+      {
+        title: 'Disclaimer Of Warranties',
+        body: [
+          'The website is provided on an as-is and as-available basis. While reasonable care is taken to keep information accurate and available, no warranty is given that the website will be uninterrupted, error-free, secure, or free from harmful components.',
+        ],
+      },
+      {
+        title: 'Limitation Of Liability',
+        body: [
+          `${SITE_OWNER} shall not be liable for any direct, indirect, incidental, consequential, or special damages arising from access to, use of, or inability to use this website, to the fullest extent permitted by applicable law.`,
+        ],
+      },
+      {
+        title: 'External Links',
+        body: [
+          'This website may contain links to external websites or third-party services. Marcel Marki has no control over and accepts no responsibility for the content, availability, or practices of external websites.',
+        ],
+      },
+      {
+        title: 'Changes To These Terms',
+        body: [
+          `${SITE_OWNER} reserves the right to modify these Terms at any time. Updates become effective when published on this page.`,
+        ],
+      },
+      {
+        title: 'Governing Law',
+        body: [
+          'These Terms shall be governed by and interpreted in accordance with the laws of Switzerland.',
+        ],
+      },
+    ],
+  },
+  privacy: {
+    eyebrow: 'Data Protection',
+    title: 'Privacy Policy',
+    updated: 'Last updated: 2026',
+    intro: `This Privacy Policy explains how personal data may be collected and processed when you visit ${SITE_DOMAIN} or contact ${SITE_OWNER}.`,
+    sections: [
+      {
+        title: 'Applicable Law',
+        body: [
+          'This website is operated in accordance with Swiss data protection law. The General Data Protection Regulation (GDPR) may also apply where visitors are located in the European Union or European Economic Area.',
+        ],
+      },
+      {
+        title: 'Data Collected Through Contact And Inquiries',
+        body: [
+          'If you contact Marcel Marki through a contact form, booking inquiry, email link, or similar communication, the information you provide may be collected and processed. This may include your name, email address, phone number, event type, event date, location, budget range, message content, and any other details you choose to share.',
+          'This information is used to respond to your inquiry, discuss bookings or collaborations, provide requested information, and maintain related correspondence.',
+        ],
+      },
+      {
+        title: 'Technical Information',
+        body: [
+          'When you visit the website, technical information may be processed automatically by hosting providers, security systems, or standard server logs. This may include IP addresses, browser type, device information, operating system, referring pages, pages visited, time of access, and access logs.',
+        ],
+      },
+      {
+        title: 'Cookies',
+        body: [
+          'This website may use cookies or similar technologies that are necessary for basic functionality, security, performance, or user experience. If optional analytics, embedded media, or marketing services are added, they may set their own cookies according to their respective policies.',
+        ],
+      },
+      {
+        title: 'Third-Party Services',
+        body: [
+          'Embedded third-party services such as YouTube, Google Maps, Spotify, Instagram, and analytics providers may process personal data according to their own privacy policies when such services are displayed, loaded, or interacted with.',
+          'Visitors should review the privacy policies of these providers for details about their data processing practices.',
+        ],
+      },
+      {
+        title: 'No Sale Of Personal Data',
+        body: [
+          'Personal data is never sold. Data may only be shared where necessary to operate the website, respond to inquiries, comply with legal obligations, protect legitimate interests, or use trusted service providers.',
+        ],
+      },
+      {
+        title: 'Your Rights',
+        body: [
+          'Subject to applicable law, you may have the right to access your personal data, request correction of inaccurate data, request deletion, restrict or object to processing, and withdraw consent where processing is based on consent.',
+          `To exercise these rights, contact ${SITE_OWNER} at ${CONTACT_EMAIL}.`,
+        ],
+      },
+      {
+        title: 'Data Retention',
+        body: [
+          'Personal data is retained only for as long as necessary for the purpose for which it was collected, including responding to inquiries, managing bookings or professional correspondence, meeting legal obligations, resolving disputes, and maintaining appropriate records.',
+        ],
+      },
+      {
+        title: 'Security',
+        body: [
+          'Reasonable technical and organizational measures are used to protect personal data against unauthorized access, loss, misuse, or disclosure. No method of transmission or storage is completely secure, and absolute security cannot be guaranteed.',
+        ],
+      },
+      {
+        title: 'Contact',
+        body: [
+          `For privacy-related questions or requests, contact ${SITE_OWNER} at ${CONTACT_EMAIL}.`,
+        ],
+      },
+    ],
+  },
+  impressum: {
+    eyebrow: 'Legal Notice',
+    title: 'Impressum',
+    updated: 'Legal notice for marcel-marki.com',
+    intro: `This Impressum provides legal information for ${SITE_DOMAIN}.`,
+    sections: [
+      {
+        title: 'Website Owner',
+        body: [
+          `${SITE_OWNER}`,
+          `Domain: ${SITE_DOMAIN}`,
+          `Contact email: ${CONTACT_EMAIL}`,
+        ],
+      },
+      {
+        title: 'Responsibility For Content',
+        body: [
+          `${SITE_OWNER} is responsible for the content of this website.`,
+        ],
+      },
+      {
+        title: 'Copyright',
+        body: [
+          `All materials on this website, including musical works, arrangements, performances, recordings, videos, photographs, written material, graphics, logos, designs, source code, and downloadable materials, are protected by copyright and other intellectual property rights. They may not be copied, reproduced, distributed, publicly performed, used for AI training, or otherwise exploited without the prior written consent of ${SITE_OWNER}.`,
+        ],
+      },
+      {
+        title: 'External Links',
+        body: [
+          'This website may link to external websites. Marcel Marki is not responsible for the content, accuracy, availability, or privacy practices of external websites.',
+        ],
+      },
+    ],
+  },
+}
+
+const getPathKey = (pathname) => {
+  const normalized = pathname.replace(/\/Piano-Website\/?/, '/').replace(/\/$/, '') || '/'
+  if (normalized === '/terms') return 'terms'
+  if (normalized === '/privacy') return 'privacy'
+  if (normalized === '/impressum') return 'impressum'
+  return 'home'
+}
+
+function setPageMeta(pageKey) {
+  const meta = PAGE_META[pageKey] ?? PAGE_META.home
+  document.title = meta.title
+  let description = document.querySelector('meta[name="description"]')
+  if (!description) {
+    description = document.createElement('meta')
+    description.setAttribute('name', 'description')
+    document.head.appendChild(description)
+  }
+  description.setAttribute('content', meta.description)
+}
+
+function Footer({ navigate }) {
+  return (
+    <footer className="footer">
+      <p className="footer-name">{SITE_OWNER}</p>
+      <nav className="footer-links" aria-label="Legal">
+        {LEGAL_LINKS.map((link) => (
+          <a
+            key={link.path}
+            href={link.path}
+            onClick={(e) => {
+              e.preventDefault()
+              navigate(link.path)
+            }}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+      <p className="footer-copyright">
+        © 2026 Marcel Marki. All rights reserved. The content of this website, including musical works, arrangements, performances, recordings, videos, photographs, written material, graphics, and designs, may not be copied, reproduced, distributed, publicly performed, used for AI training, or otherwise exploited without the prior written consent of Marcel Marki.
+      </p>
+    </footer>
+  )
+}
+
+function LegalPage({ page, navigate }) {
+  return (
+    <main className="legal-page">
+      <div className="legal-bg" aria-hidden="true" />
+      <section className="legal-hero">
+        <p className="legal-eyebrow">{page.eyebrow}</p>
+        <h1>{page.title}</h1>
+        <div className="section-underline centered" />
+        <p className="legal-updated">{page.updated}</p>
+        <p className="legal-intro">{page.intro}</p>
+      </section>
+
+      <section className="legal-content" aria-label={page.title}>
+        {page.sections.map((section) => (
+          <article className="legal-section" key={section.title}>
+            <h2>{section.title}</h2>
+            {section.body.map((paragraph, idx) => (
+              <p key={idx}>
+                {paragraph.includes(CONTACT_EMAIL) ? (
+                  paragraph.split(CONTACT_EMAIL).map((part, partIdx, parts) => (
+                    <span key={partIdx}>
+                      {part}
+                      {partIdx < parts.length - 1 && (
+                        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+                      )}
+                    </span>
+                  ))
+                ) : paragraph}
+              </p>
+            ))}
+          </article>
+        ))}
+      </section>
+
+      <div className="legal-actions">
+        <a
+          href="/"
+          className="legal-home-link"
+          onClick={(e) => {
+            e.preventDefault()
+            navigate('/')
+          }}
+        >
+          Back to Home
+        </a>
+      </div>
+    </main>
+  )
+}
+
+/* ─── Consultation Modal ─── */
+function ConsultationModal({ onClose, t }) {
+  const [form, setForm] = useState({
+    name: '', email: '', phone: '', eventType: '',
+    guests: '', budget: '', date: '', location: '', description: ''
+  })
+  const [sent, setSent] = useState(false)
+
+  const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }))
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const lines = [
+      `${t('modalName')}: ${form.name}`,
+      `${t('modalEmail')}: ${form.email}`,
+      form.phone    ? `${t('modalPhone')}: ${form.phone}`       : null,
+      `${t('modalEventType')}: ${form.eventType}`,
+      `${t('modalGuests')}: ${form.guests}`,
+      `${t('modalBudget')}: ${form.budget}`,
+      form.date     ? `${t('modalDate')}: ${form.date}`         : null,
+      form.location ? `${t('modalLocation')}: ${form.location}` : null,
+      `\n${t('modalDescription')}:\n${form.description}`,
+    ].filter(Boolean).join('\n')
+
+    const subject = encodeURIComponent(`${t('modalEmailSubject')} – ${form.name}`)
+    const body    = encodeURIComponent(lines)
+    window.open(`mailto:event@marcel-marki.com?subject=${subject}&body=${body}`)
+    setSent(true)
+  }
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-card" onClick={e => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose} aria-label="Close">×</button>
+
+        {sent ? (
+          <div className="modal-success">
+            <span className="modal-success-note">♪</span>
+            <h3>{t('modalSuccessTitle')}</h3>
+            <p>{t('modalSuccessText')}</p>
+            <button className="modal-submit" onClick={onClose}>{t('modalClose')}</button>
+          </div>
+        ) : (
+          <>
+            <h2 className="modal-title">{t('schedule')}</h2>
+            <p className="modal-subtitle">{t('modalSubtitle')}</p>
+            <form className="modal-form" onSubmit={handleSubmit}>
+
+              <div className="modal-row">
+                <div className="modal-field">
+                  <label>{t('modalName')} *</label>
+                  <input required value={form.name} onChange={set('name')} placeholder={t('modalNamePh')} />
+                </div>
+                <div className="modal-field">
+                  <label>{t('modalEmail')} *</label>
+                  <input required type="email" value={form.email} onChange={set('email')} placeholder="you@example.com" />
+                </div>
+              </div>
+
+              <div className="modal-row">
+                <div className="modal-field">
+                  <label>{t('modalPhone')}</label>
+                  <input value={form.phone} onChange={set('phone')} placeholder="+41 ..." />
+                </div>
+                <div className="modal-field">
+                  <label>{t('modalEventType')} *</label>
+                  <select required value={form.eventType} onChange={set('eventType')}>
+                    <option value="">{t('selectOption')}</option>
+                    <option value={t('etWedding')}>{t('etWedding')}</option>
+                    <option value={t('etPrivate')}>{t('etPrivate')}</option>
+                    <option value={t('etCorporate')}>{t('etCorporate')}</option>
+                    <option value={t('etConcert')}>{t('etConcert')}</option>
+                    <option value={t('etOther')}>{t('etOther')}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="modal-row">
+                <div className="modal-field">
+                  <label>{t('modalGuests')} *</label>
+                  <select required value={form.guests} onChange={set('guests')}>
+                    <option value="">{t('selectOption')}</option>
+                    <option>1–20</option>
+                    <option>20–50</option>
+                    <option>50–100</option>
+                    <option>100–200</option>
+                    <option>200+</option>
+                  </select>
+                </div>
+                <div className="modal-field">
+                  <label>{t('modalBudget')} *</label>
+                  <select required value={form.budget} onChange={set('budget')}>
+                    <option value="">{t('selectOption')}</option>
+                    <option value="< CHF 500">{'< CHF 500'}</option>
+                    <option value="CHF 500–1,000">CHF 500–1,000</option>
+                    <option value="CHF 1,000–2,500">CHF 1,000–2,500</option>
+                    <option value="CHF 2,500–5,000">CHF 2,500–5,000</option>
+                    <option value="CHF 5,000+">CHF 5,000+</option>
+                    <option value={t('budgetOpen')}>{t('budgetOpen')}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="modal-row">
+                <div className="modal-field">
+                  <label>{t('modalDate')}</label>
+                  <input type="date" value={form.date} onChange={set('date')} />
+                </div>
+                <div className="modal-field">
+                  <label>{t('modalLocation')}</label>
+                  <input value={form.location} onChange={set('location')} placeholder={t('modalLocationPh')} />
+                </div>
+              </div>
+
+              <div className="modal-field full">
+                <label>{t('modalDescription')} *</label>
+                <textarea
+                  required rows={4}
+                  value={form.description}
+                  onChange={set('description')}
+                  placeholder={t('modalDescPh')}
+                />
+              </div>
+
+              <button type="submit" className="modal-submit">{t('modalSubmit')}</button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
+/* ─── Main App ─── */
 function App() {
-  const [scrollY, setScrollY] = useState(0)
+  const [scrollY, setScrollY]               = useState(0)
   const [visibleSections, setVisibleSections] = useState({})
-  const [isLoading, setIsLoading] = useState(true)
-  const [language, setLanguage] = useState('en')
+  const [isLoading, setIsLoading]           = useState(true)
+  const [language, setLanguage]             = useState('en')
+  const [navScrolled, setNavScrolled]       = useState(false)
+  const [showModal, setShowModal]           = useState(false)
+  const [pageKey, setPageKey]               = useState(() => getPathKey(window.location.pathname))
+  const isLegalPage = pageKey !== 'home'
 
   useEffect(() => {
-    // Simulate loading time and auto-hide startup screen
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 3500)
-
+    const timer = setTimeout(() => setIsLoading(false), 3500)
     return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
+    setPageMeta(pageKey)
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }, [pageKey])
+
+  useEffect(() => {
+    const handlePopState = () => setPageKey(getPathKey(window.location.pathname))
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  useEffect(() => {
+    if (showModal) document.body.style.overflow = 'hidden'
+    else           document.body.style.overflow = ''
+    return () => { document.body.style.overflow = '' }
+  }, [showModal])
+
+  useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY)
-
-      // Check which sections are in view
+      setNavScrolled(window.scrollY > 60)
       const sections = document.querySelectorAll('[data-section]')
-      const newVisible = {}
-      
-      sections.forEach(section => {
-        const rect = section.getBoundingClientRect()
-        const isVisible = rect.top < window.innerHeight * 0.75
-        newVisible[section.dataset.section] = isVisible
+      const nv = {}
+      sections.forEach(s => {
+        nv[s.dataset.section] = s.getBoundingClientRect().top < window.innerHeight * 0.78
       })
-      
-      setVisibleSections(newVisible)
+      setVisibleSections(nv)
     }
-
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   const translations = {
     en: {
-      heroTitle: 'Marcel Marki',
-      heroSubtitle: 'Event Pianist',
-      featuredTitle: 'Featured Performances',
-      cta: 'Discover My Journey',
-      aboutTitle: 'About Me',
-      aboutP1: 'I am a 22 year old pianist who lives close to Lucerne. I started learning piano on my own at the age of 13 and began taking lessons 5 years later.',
-      aboutP2: 'I am very open to playing different styles; I love to perform a lot, whether on stage or at open pianos.',
-      servicesTitle: 'My Expertise',
-      upcomingTitle: 'Upcoming Concerts',
-      previousTitle: 'Previous Concerts',
-      galleryTitle: 'Gallery',
-      contactTitle: "Let's Connect",
-      sendMessage: 'Send a Message',
-      schedule: 'Schedule a Consultation',
-      navAbout: 'About Me',
-      navUpcoming: 'Upcoming Concerts',
-      navPrevious: 'Previous Concerts',
-      navGallery: 'Gallery',
-      navContact: 'Contact'
+      /* hero */
+      heroSubtitle:      'Event Pianist',
+      heroKicker:        'Piano for elevated occasions',
+      heroIntro:         'Elegant live piano for private events, concert evenings, and memorable celebrations.',
+      cta:               'Discover My Journey',
+      /* nav */
+      navAbout:          'About',
+      navServices:       'Services',
+      navFeatured:       'Performances',
+      navTestimonials:   'Testimonials',
+      navUpcoming:       'Upcoming',
+      navPrevious:       'Previous',
+      navGallery:        'Gallery',
+      navContact:        'Contact',
+      /* about */
+      aboutTitle:        'About Me',
+      aboutP1:           'Hello, my name is Marcel Marki, a passionate pianist dedicated to bringing unforgettable musical experiences to every event.',
+      aboutP2:           'My journey with the piano began at the age of 13 when I started learning on my own. After five years of self-teaching, I continued my musical education through professional piano lessons, further developing my skills and artistic expression.',
+      aboutP3:           'Today, I perform a wide variety of styles, from classical music to modern pop, film music, and contemporary arrangements. In addition to live performances, I create my own arrangements and compositions and share my passion for music through social media content.',
+      aboutP4:           'Whether performing at weddings, corporate events, private celebrations, or other special occasions, my goal is always to provide high-quality music tailored to the atmosphere of your event. I take pride in being professional, reliable, and attentive to every detail, ensuring that your special occasion is both memorable and seamless.',
+      aboutP5:           'My mission is simple: to create the perfect musical atmosphere and help make your event truly unforgettable.',
+      /* services */
+      servicesTitle:     'My Expertise',
+      svc1Title:         'Diverse Musical Repertoire',
+      svc1Desc:          'From classical masterpieces to modern hits, film scores, jazz, pop, and contemporary arrangements — performances tailored to every audience and atmosphere.',
+      svc2Title:         'Custom Arrangements & Piano Covers',
+      svc2Desc:          'Unique piano arrangements and personalized interpretations of well-known songs, creating memorable musical moments for every occasion.',
+      svc3Title:         'Weddings & Special Events',
+      svc3Desc:          'Professional live piano entertainment for weddings, corporate events, receptions, private celebrations, and exclusive gatherings.',
+      /* featured */
+      featuredTitle:     'Featured Performances',
+      /* concerts */
+      upcomingTitle:     'Upcoming Concerts',
+      noUpcoming:        'No upcoming concerts listed yet — check back soon.',
+      previousTitle:     'Previous Concerts',
+      noPrevious:        'Past concerts will appear here.',
+      eventVenueAmante:  'Amante, Belp',
+      eventOpenTo:       'Open to everyone',
+      eventDiningDesc:   'Join us for an intimate dining evening where I will be performing live piano background music throughout the night. A wonderful opportunity to enjoy fine dining accompanied by live music in a warm, welcoming atmosphere.',
+      /* parallax */
+      parallaxQuote:     '"Music is the language of the soul"',
+      /* testimonials */
+      testimonialsTitle: 'Testimonials',
+      testimonial1:      'A mesmerising performance — professional and heartfelt.',
+      testimonial2:      'Perfect for our event, very accommodating and talented.',
+      /* gallery */
+      galleryTitle:      'Gallery',
+      /* contact */
+      contactTitle:      "Let's Connect",
+      contactSubtext:    'Interested in performances, collaborations, or lessons?',
+      sendMessage:       'Send a Message',
+      schedule:          'Schedule a Consultation',
+      /* footer */
+      footerLine:        'Crafted with passion',
+      /* modal */
+      modalSubtitle:     'Fill in the details below and I will be in touch shortly.',
+      modalName:         'Full Name',
+      modalNamePh:       'Your name',
+      modalEmail:        'Email Address',
+      modalPhone:        'Phone (optional)',
+      modalEventType:    'Event Type',
+      modalGuests:       'Expected Guests',
+      modalBudget:       'Budget Range',
+      modalDate:         'Preferred Date',
+      modalLocation:     'Event Location',
+      modalLocationPh:   'City or venue',
+      modalDescription:  'Description & Expectations',
+      modalDescPh:       'Tell me about your event, musical preferences, and what you envision...',
+      modalSubmit:       'Send Inquiry',
+      modalClose:        'Close',
+      modalSuccessTitle: 'Thank you!',
+      modalSuccessText:  'Your inquiry has been sent to event@marcel-marki.com. I will be in touch shortly.',
+      modalEmailSubject: 'Consultation Request',
+      selectOption:      '— Please select —',
+      etWedding:         'Wedding',
+      etPrivate:         'Private Party',
+      etCorporate:       'Corporate Event',
+      etConcert:         'Concert Evening',
+      etOther:           'Other',
+      budgetOpen:        'Open to discuss',
     },
     de: {
-      heroTitle: 'Marcel Marki',
-      heroSubtitle: 'Eventpianist',
-      featuredTitle: 'Ausgewählte Auftritte',
-      cta: 'Entdecke meine Reise',
-      aboutTitle: 'Über mich',
-      aboutP1: 'Mit einer Leidenschaft für klassische Musik und zeitgenössische Kompositionen erwecke ich jedes Stück zum Leben.',
-      aboutP2: 'Jeder Auftritt ist eine Geschichte, jede Note ein Pinselstrich auf der Klangleinwand.',
-      servicesTitle: 'Meine Expertise',
-      upcomingTitle: 'Bevorstehende Konzerte',
-      previousTitle: 'Frühere Konzerte',
-      galleryTitle: 'Galerie',
-      contactTitle: 'Lass uns in Kontakt treten',
-      sendMessage: 'Nachricht senden',
-      schedule: 'Beratung vereinbaren',
-      navAbout: 'Über mich',
-      navUpcoming: 'Bevorstehende Konzerte',
-      navPrevious: 'Frühere Konzerte',
-      navGallery: 'Galerie',
-      navContact: 'Kontakt'
+      /* hero */
+      heroSubtitle:      'Eventpianist',
+      heroKicker:        'Klavier für besondere Anlässe',
+      heroIntro:         'Elegantes Live-Piano für private Anlässe, Konzertabende und besondere Momente.',
+      cta:               'Entdecke meine Reise',
+      /* nav */
+      navAbout:          'Über mich',
+      navServices:       'Leistungen',
+      navFeatured:       'Auftritte',
+      navTestimonials:   'Stimmen',
+      navUpcoming:       'Konzerte',
+      navPrevious:       'Früher',
+      navGallery:        'Galerie',
+      navContact:        'Kontakt',
+      /* about */
+      aboutTitle:        'Über mich',
+      aboutP1:           'Hallo, mein Name ist Marcel Marki. Als leidenschaftlicher Pianist widme ich mich dem Ziel, unvergessliche musikalische Erlebnisse bei jedem Anlass zu schaffen.',
+      aboutP2:           'Meine Reise am Klavier begann im Alter von 13 Jahren, als ich autodidaktisch zu lernen begann. Nach fünf Jahren Selbststudium setzte ich meine musikalische Ausbildung durch professionellen Klavierunterricht fort und entwickelte meine Fähigkeiten und meinen künstlerischen Ausdruck weiter.',
+      aboutP3:           'Heute spiele ich eine breite Vielfalt an Stilen — von klassischer Musik bis hin zu modernem Pop, Filmmusik und zeitgenössischen Arrangements. Neben Live-Auftritten erstelle ich eigene Arrangements und Kompositionen und teile meine Leidenschaft für Musik über Social Media.',
+      aboutP4:           'Ob bei Hochzeiten, Firmenevents, privaten Feiern oder anderen besonderen Anlässen — mein Ziel ist es stets, hochwertige Musik zu bieten, die perfekt zur Atmosphäre Ihres Events passt. Mir ist es wichtig, professionell, zuverlässig und aufmerksam zu sein, damit Ihr besonderer Anlass unvergesslich und reibungslos verläuft.',
+      aboutP5:           'Meine Mission ist einfach: die perfekte musikalische Atmosphäre zu schaffen und dazu beizutragen, Ihr Event wirklich unvergesslich zu machen.',
+      /* services */
+      servicesTitle:     'Meine Expertise',
+      svc1Title:         'Vielseitiges Musikrepertoire',
+      svc1Desc:          'Von klassischen Meisterwerken bis zu modernen Hits, Filmmusik, Jazz, Pop und zeitgenössischen Arrangements — Auftritte, die auf jedes Publikum und jede Atmosphäre zugeschnitten sind.',
+      svc2Title:         'Eigene Arrangements & Piano-Cover',
+      svc2Desc:          'Einzigartige Klavierarrangements und persönliche Interpretationen bekannter Songs, die unvergessliche musikalische Momente für jeden Anlass schaffen.',
+      svc3Title:         'Hochzeiten & besondere Anlässe',
+      svc3Desc:          'Professionelle Live-Klavierunterhaltung für Hochzeiten, Firmenevents, Empfänge, private Feiern und exklusive Veranstaltungen.',
+      /* featured */
+      featuredTitle:     'Ausgewählte Auftritte',
+      /* concerts */
+      upcomingTitle:     'Bevorstehende Konzerte',
+      noUpcoming:        'Noch keine bevorstehenden Konzerte — bald mehr.',
+      previousTitle:     'Frühere Konzerte',
+      noPrevious:        'Vergangene Konzerte erscheinen hier.',
+      eventVenueAmante:  'Amante, Belp',
+      eventOpenTo:       'Offen für alle',
+      eventDiningDesc:   'Begleiten Sie uns an einem stimmungsvollen Dinerabend, bei dem ich live Hintergrundmusik auf dem Klavier spielen werde. Eine wunderbare Gelegenheit, ein feines Dinner mit Live-Klaviermusik in einer einladenden Atmosphäre zu geniessen.',
+      /* parallax */
+      parallaxQuote:     '„Musik ist die Sprache der Seele"',
+      /* testimonials */
+      testimonialsTitle: 'Stimmen',
+      testimonial1:      'Eine faszinierende Darbietung — professionell und von Herzen.',
+      testimonial2:      'Perfekt für unsere Veranstaltung, sehr zuvorkommend und talentiert.',
+      /* gallery */
+      galleryTitle:      'Galerie',
+      /* contact */
+      contactTitle:      'Lass uns in Kontakt treten',
+      contactSubtext:    'Interessiert an Auftritten, Zusammenarbeit oder Unterricht?',
+      sendMessage:       'Nachricht senden',
+      schedule:          'Beratung anfragen',
+      /* footer */
+      footerLine:        'Mit Leidenschaft gestaltet',
+      /* modal */
+      modalSubtitle:     'Füllen Sie das Formular aus — ich melde mich baldmöglichst.',
+      modalName:         'Vollständiger Name',
+      modalNamePh:       'Ihr Name',
+      modalEmail:        'E-Mail-Adresse',
+      modalPhone:        'Telefon (optional)',
+      modalEventType:    'Art der Veranstaltung',
+      modalGuests:       'Erwartete Gäste',
+      modalBudget:       'Budgetrahmen',
+      modalDate:         'Gewünschtes Datum',
+      modalLocation:     'Veranstaltungsort',
+      modalLocationPh:   'Stadt oder Venue',
+      modalDescription:  'Beschreibung & Erwartungen',
+      modalDescPh:       'Erzählen Sie mir von Ihrer Veranstaltung, musikalischen Vorlieben und Vorstellungen...',
+      modalSubmit:       'Anfrage senden',
+      modalClose:        'Schließen',
+      modalSuccessTitle: 'Vielen Dank!',
+      modalSuccessText:  'Ihre Anfrage wurde an event@marcel-marki.com gesendet. Ich melde mich so bald wie möglich.',
+      modalEmailSubject: 'Beratungsanfrage',
+      selectOption:      '— Bitte auswählen —',
+      etWedding:         'Hochzeit',
+      etPrivate:         'Privatfeier',
+      etCorporate:       'Firmenveranstaltung',
+      etConcert:         'Konzertabend',
+      etOther:           'Sonstiges',
+      budgetOpen:        'Offen für Gespräch',
     }
   }
 
-  const t = (key) => (translations[language] && translations[language][key]) || key
+  const t = (key) => (translations[language]?.[key]) ?? key
 
-  const handleLanguageSelect = (lang) => {
-    setLanguage(lang)
-    setIsLoading(false)
+  const navigate = (path) => {
+    const targetKey = getPathKey(path)
+    window.history.pushState({}, '', path)
+    setPageKey(targetKey)
   }
 
-  if (isLoading) {
+  const scrollTo = (id) => {
+    if (isLegalPage) {
+      navigate('/')
+      window.setTimeout(() => {
+        document.querySelector(`[data-section="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 0)
+      return
+    }
+    document.querySelector(`[data-section="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  /* ── Loading screen ── */
+  if (isLoading && !isLegalPage) {
     return (
-      <div className="loading-screen">
+      <div className="loading-screen" style={{ backgroundImage: `url(${bgPiano})` }}>
+        <div className="loading-bg-overlay" />
         <div className="startup-container">
           <div className="logo-animation">
-            <div className="piano-keys">
-              <div className="key key-1"></div>
-              <div className="key key-2"></div>
-              <div className="key key-3"></div>
-              <div className="key key-4"></div>
-              <div className="key key-5"></div>
-              <div className="key key-6"></div>
-              <div className="key key-7"></div>
+            <div className="piano-keyboard">
+              <div className="piano-white-keys">
+                <div className="wkey wk-1" /><div className="wkey wk-2" /><div className="wkey wk-3" />
+                <div className="wkey wk-4" /><div className="wkey wk-5" /><div className="wkey wk-6" />
+                <div className="wkey wk-7" />
+              </div>
+              <div className="piano-black-keys">
+                <div className="bkey bk-1" /><div className="bkey bk-2" /><div className="bkey bk-3" />
+                <div className="bkey bk-4" /><div className="bkey bk-5" />
+              </div>
             </div>
           </div>
-          <h1 className="startup-title">{t('heroTitle')}</h1>
+          <h1 className="startup-title">Marcel Marki</h1>
           <p className="startup-subtitle">{t('heroSubtitle')}</p>
-
+          <p className="startup-kicker">{t('heroKicker')}</p>
           <div className="loading-bar music-bar">
-            <div className="loading-progress"></div>
+            <div className="loading-progress" />
           </div>
         </div>
       </div>
     )
   }
 
+  const NAV_ITEMS = [
+    { id: 'about',        key: 'navAbout' },
+    { id: 'services',     key: 'navServices' },
+    { id: 'featured',     key: 'navFeatured' },
+    { id: 'testimonials', key: 'navTestimonials' },
+    { id: 'upcoming',     key: 'navUpcoming' },
+    { id: 'previous',     key: 'navPrevious' },
+    { id: 'gallery',      key: 'navGallery' },
+    { id: 'contact',      key: 'navContact' },
+  ]
+
   return (
     <div className="app">
-      <header className="topbar">
+      {/* ── Consultation Modal ── */}
+      {showModal && (
+        <ConsultationModal onClose={() => setShowModal(false)} t={t} />
+      )}
+
+      {/* ── Nav ── */}
+      <header className={`topbar ${navScrolled ? 'scrolled' : ''}`}>
         <nav className="nav">
+          <span
+            className="nav-brand"
+            onClick={() => {
+              if (isLegalPage) navigate('/')
+              else window.scrollTo({ top: 0, behavior: 'smooth' })
+            }}
+          >
+            Marcel Marki
+          </span>
           <ul className="nav-list">
-            {[{id:'about', key:'navAbout'},{id:'upcoming', key:'navUpcoming'},{id:'previous', key:'navPrevious'},{id:'gallery', key:'navGallery'},{id:'contact', key:'navContact'}].map(item => (
+            {NAV_ITEMS.map((item, idx) => (
               <li key={item.id} className="nav-item">
-                <button className="nav-link" onClick={() => {
-                  const el = document.querySelector(`[data-section="${item.id}"]`)
-                  if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'})
-                }}>{t(item.key)}</button>
+                {idx > 0 && <span className="nav-divider" aria-hidden="true" />}
+                <button className="nav-link" onClick={() => scrollTo(item.id)}>
+                  {t(item.key)}
+                </button>
               </li>
             ))}
           </ul>
           <div className="nav-actions">
-            <button className="nav-lang" onClick={() => setLanguage(language === 'en' ? 'de' : 'en')}>{language === 'en' ? 'DE' : 'EN'}</button>
+            <button className="nav-lang" onClick={() => setLanguage(language === 'en' ? 'de' : 'en')}>
+              {language === 'en' ? 'DE' : 'EN'}
+            </button>
           </div>
         </nav>
       </header>
 
-      {/* Hero Section with Parallax */}
-      <section className="hero" style={{ transform: `translateY(${scrollY * 0.5}px)` }}>
+      {isLegalPage ? (
+        <>
+          <LegalPage page={LEGAL_PAGES[pageKey]} navigate={navigate} />
+          <Footer navigate={navigate} />
+        </>
+      ) : (
+        <>
+
+      {/* ── Hero ── */}
+      <section className="hero">
+        {/* Piano image background — same treatment as loading screen */}
+        <div
+          className="hero-bg"
+          style={{ backgroundImage: `url(${bgPiano})` }}
+        />
+
+        <div className="floating-notes" aria-hidden="true">
+          {FLOATING_NOTES.map((note, i) => (
+            <span key={i} className={`floating-note fn-${i + 1}`}>{note}</span>
+          ))}
+        </div>
+
         <div className="hero-content">
-          <div className="fade-in-down">
-            <h1 className="hero-title">{t('heroTitle')}</h1>
+          <div className="hero-inner fade-in-down">
+            <p className="hero-kicker">{t('heroKicker')}</p>
+            <h1 className="hero-title">
+              {['Marcel', 'Marki'].map((word, wi) => (
+                <span key={wi} className="title-word">
+                  {word.split('').map((char, ci) => (
+                    <span
+                      key={ci}
+                      className="title-char"
+                      style={{ animationDelay: `${0.3 + (wi * 6 + ci) * 0.07}s` }}
+                    >
+                      {char}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </h1>
             <p className="hero-subtitle">{t('heroSubtitle')}</p>
-            <button className="cta-button" onClick={() => {
-              const el = document.querySelector('[data-section="about"]')
-              if (el) el.scrollIntoView({behavior: 'smooth'})
-            }}>{t('cta')}</button>
+            <div className="hero-divider" aria-hidden="true">
+              <span className="hero-divider-line" />
+              <span className="hero-divider-note">♪</span>
+              <span className="hero-divider-line" />
+            </div>
+            <p className="hero-intro">{t('heroIntro')}</p>
+            <button className="cta-button" onClick={() => scrollTo('about')}>
+              {t('cta')}
+            </button>
           </div>
+        </div>
+
+        <div className="hero-scroll-hint" aria-hidden="true">
+          <span className="scroll-line" />
         </div>
       </section>
 
-      {/* About Section */}
+      {/* ── About ── */}
       <section className="about" data-section="about">
         <div className="container">
           <div className={`about-content slide-in-left ${visibleSections.about ? 'visible' : ''}`}>
             <h2>{t('aboutTitle')}</h2>
+            <div className="section-underline" />
             <p>{t('aboutP1')}</p>
             <p>{t('aboutP2')}</p>
+            <p>{t('aboutP3')}</p>
+            <p>{t('aboutP4')}</p>
+            <p>{t('aboutP5')}</p>
           </div>
           <div className={`about-image slide-in-right ${visibleSections.about ? 'visible' : ''}`}>
-            <img src={img1} alt="Piano performance" className="about-img" />
+            <div className="image-frame">
+              <img src={img1} alt="Piano performance" className="about-img" />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* ── Services ── */}
       <section className="services" data-section="services">
-        <div className="container">
-          <h2 className={`section-title fade-in-up ${visibleSections.services ? 'visible' : ''}`}>{t('servicesTitle')}</h2>
-          
+        <div className="section-wrap">
+          <h2 className={`section-title fade-in-up ${visibleSections.services ? 'visible' : ''}`}>
+            {t('servicesTitle')}
+          </h2>
+          <div className={`section-underline centered fade-in-up ${visibleSections.services ? 'visible' : ''}`} />
           <div className="services-grid">
-            <div className={`service-card fade-in-up ${visibleSections.services ? 'visible' : ''}`} style={{ animationDelay: '0.1s' }}>
-              <div className="service-icon">🎼</div>
-              <h3>Classical Performance</h3>
-              <p>Masterful interpretations of timeless classical compositions</p>
-            </div>
-            
-            <div className={`service-card fade-in-up ${visibleSections.services ? 'visible' : ''}`} style={{ animationDelay: '0.2s' }}>
-              <div className="service-icon">🎵</div>
-              <h3>Contemporary Fusion</h3>
-              <p>Modern arrangements blending classical elegance with contemporary vibrancy</p>
-            </div>
-            
-            <div className={`service-card fade-in-up ${visibleSections.services ? 'visible' : ''}`} style={{ animationDelay: '0.3s' }}>
-              <div className="service-icon">🎓</div>
-              <h3>Instruction & Mentoring</h3>
-              <p>Personalized lessons and guidance for aspiring musicians</p>
-            </div>
+            {[
+              { icon: '🎹', tKey: 'svc1' },
+              { icon: '🎼', tKey: 'svc2' },
+              { icon: '✨', tKey: 'svc3' },
+            ].map((s, i) => (
+              <div
+                key={i}
+                className={`service-card fade-in-up ${visibleSections.services ? 'visible' : ''}`}
+                style={{ animationDelay: `${0.1 + i * 0.15}s` }}
+              >
+                <div className="service-icon">{s.icon}</div>
+                <h3>{t(`${s.tKey}Title`)}</h3>
+                <p>{t(`${s.tKey}Desc`)}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Featured Works Section */}
+      {/* ── Featured ── */}
       <section className="featured" data-section="featured">
-        <div className="container">
-          <h2 className={`section-title fade-in-up ${visibleSections.featured ? 'visible' : ''}`}>{t('featuredTitle')}</h2>
-          
+        <div className="section-wrap">
+          <h2 className={`section-title fade-in-up ${visibleSections.featured ? 'visible' : ''}`}>
+            {t('featuredTitle')}
+          </h2>
+          <div className={`section-underline centered fade-in-up ${visibleSections.featured ? 'visible' : ''}`} />
           <div className="works-grid">
             {[
-              { title: 'Moonlight Sonata', img: img1 },
-              { title: 'Les Misérables', img: img2 },
-              { title: 'River Flows in You', img: img3 }
-            ].map((work, index) => (
-              <div 
-                key={index}
-                className={`work-card zoom-in hover-lift ${visibleSections.featured ? 'visible' : ''}`}
-                style={{ animationDelay: `${index * 0.15}s` }}
+              { title: 'Moonlight Sonata',    composer: 'L. v. Beethoven', img: img1 },
+              { title: 'Les Misérables',       composer: 'C. M. Schönberg', img: img2 },
+              { title: 'River Flows in You',  composer: 'Yiruma',           img: img3 },
+            ].map((work, i) => (
+              <div
+                key={i}
+                className={`work-card zoom-in ${visibleSections.featured ? 'visible' : ''}`}
+                style={{ animationDelay: `${i * 0.15}s` }}
               >
                 <div className="work-image">
                   <img src={work.img} alt={work.title} className="work-img" />
+                  <div className="work-overlay">
+                    <span className="work-overlay-note">♪</span>
+                  </div>
                 </div>
-                <h3>{work.title}</h3>
-                <p>An exquisite performance</p>
+                <div className="work-info">
+                  <h3>{work.title}</h3>
+                  <p>{work.composer}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Upcoming Concerts Section */}
+      {/* ── Upcoming ── */}
       <section className="upcoming" data-section="upcoming">
-        <div className="container">
-          <h2 className={`section-title fade-in-up ${visibleSections.upcoming ? 'visible' : ''}`}>{t('upcomingTitle')}</h2>
-          <p className="center muted">{language === 'en' ? '(No upcoming concerts listed yet)' : '(Keine bevorstehenden Konzerte vorhanden)'}</p>
-        </div>
-      </section>
-
-      {/* Previous Concerts Section */}
-      <section className="previous" data-section="previous">
-        <div className="container">
-          <h2 className={`section-title fade-in-up ${visibleSections.previous ? 'visible' : ''}`}>{t('previousTitle')}</h2>
-          <p className="center muted">{language === 'en' ? '(Past concerts will appear here)' : '(Vergangene Konzerte erscheinen hier)'}</p>
-        </div>
-      </section>
-
-      {/* Parallax Section */}
-      <section className="parallax" style={{ backgroundPositionY: `${scrollY * 0.7}px` }}>
-        <div className="parallax-content">
-          <h2>"Music is the language of the soul"</h2>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="testimonials" data-section="testimonials">
-        <div className="container">
-          <h2 className={`section-title fade-in-up ${visibleSections.testimonials ? 'visible' : ''}`}>Testimonials</h2>
-          <div className="testimonials-grid">
-            <div className={`testimonial-card slide-in-up ${visibleSections.testimonials ? 'visible' : ''}`}>
-              <p className="quote">“A mesmerising performance — professional and heartfelt.”</p>
-              <p className="author">— Anna S.</p>
-            </div>
-            <div className={`testimonial-card slide-in-up ${visibleSections.testimonials ? 'visible' : ''}`}>
-              <p className="quote">“Perfect for our event, very accommodating and talented.”</p>
-              <p className="author">— K. Meier</p>
-            </div>
+        <div className="section-wrap">
+          <h2 className={`section-title fade-in-up ${visibleSections.upcoming ? 'visible' : ''}`}>
+            {t('upcomingTitle')}
+          </h2>
+          <div className={`section-underline centered fade-in-up ${visibleSections.upcoming ? 'visible' : ''}`} />
+          <div className="events-grid">
+            {[
+              { date: language === 'de' ? 'Dienstag, 10. November 2026' : 'Tuesday, 10 November 2026', time: '18:00 – 21:00' },
+              { date: language === 'de' ? 'Dienstag, 22. Dezember 2026' : 'Tuesday, 22 December 2026',  time: '18:00 – 21:00' },
+            ].map((ev, i) => (
+              <div
+                key={i}
+                className={`event-card fade-in-up ${visibleSections.upcoming ? 'visible' : ''}`}
+                style={{ animationDelay: `${0.1 + i * 0.18}s` }}
+              >
+                <div className="event-venue-logo">
+                  <img src={amantelogo} alt="Amante Belp" className="amante-logo" />
+                </div>
+                <div className="event-body">
+                  <div className="event-meta">
+                    <span className="event-date">{ev.date}</span>
+                    <span className="event-time">{ev.time}</span>
+                  </div>
+                  <p className="event-venue-name">{t('eventVenueAmante')}</p>
+                  <p className="event-desc">{t('eventDiningDesc')}</p>
+                  <span className="event-badge">{t('eventOpenTo')}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Gallery Section */}
+      {/* ── Previous ── */}
+      <section className="previous" data-section="previous">
+        <div className="section-wrap">
+          <h2 className={`section-title fade-in-up ${visibleSections.previous ? 'visible' : ''}`}>
+            {t('previousTitle')}
+          </h2>
+          <div className={`section-underline centered fade-in-up ${visibleSections.previous ? 'visible' : ''}`} />
+          <p className="center muted">{t('noPrevious')}</p>
+        </div>
+      </section>
+
+      {/* ── Parallax quote ── */}
+      <section className="parallax" style={{ backgroundPositionY: `${scrollY * 0.5}px` }}>
+        <div className="parallax-content">
+          <span className="parallax-deco" aria-hidden="true">♫</span>
+          <h2>{t('parallaxQuote')}</h2>
+          <span className="parallax-deco" aria-hidden="true">♫</span>
+        </div>
+      </section>
+
+      {/* ── Testimonials ── */}
+      <section className="testimonials" data-section="testimonials">
+        <div className="section-wrap">
+          <h2 className={`section-title fade-in-up ${visibleSections.testimonials ? 'visible' : ''}`}>
+            {t('testimonialsTitle')}
+          </h2>
+          <div className={`section-underline centered fade-in-up ${visibleSections.testimonials ? 'visible' : ''}`} />
+          <div className="testimonials-grid">
+            {[
+              { key: 'testimonial1', author: 'Anna S.' },
+              { key: 'testimonial2', author: 'K. Meier' },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className={`testimonial-card slide-in-up ${visibleSections.testimonials ? 'visible' : ''}`}
+                style={{ animationDelay: `${i * 0.15}s` }}
+              >
+                <span className="quote-mark">"</span>
+                <p className="quote">{t(item.key)}</p>
+                <p className="author">— {item.author}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Gallery ── */}
       <section className="gallery" data-section="gallery">
-        <div className="container">
-          <h2 className={`section-title fade-in-up ${visibleSections.gallery ? 'visible' : ''}`}>{t('galleryTitle')}</h2>
-          
+        <div className="section-wrap">
+          <h2 className={`section-title fade-in-up ${visibleSections.gallery ? 'visible' : ''}`}>
+            {t('galleryTitle')}
+          </h2>
+          <div className={`section-underline centered fade-in-up ${visibleSections.gallery ? 'visible' : ''}`} />
           <div className="gallery-grid">
             {[img1, img2, img3, img1, img2, img3].map((img, i) => (
-              <div 
+              <div
                 key={i}
-                className={`gallery-item slide-in-up hover-scale ${visibleSections.gallery ? 'visible' : ''}`}
-                style={{ animationDelay: `${i * 0.1}s` }}
+                className={`gallery-item slide-in-up ${visibleSections.gallery ? 'visible' : ''}`}
+                style={{ animationDelay: `${i * 0.08}s` }}
               >
-                <img src={img} alt={`Gallery item ${i + 1}`} className="gallery-img" />
+                <img src={img} alt={`Gallery ${i + 1}`} className="gallery-img" />
+                <div className="gallery-overlay" />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
+      {/* ── Contact ── */}
       <section className="contact" data-section="contact">
-        <div className="container">
+        <div className="section-wrap">
           <div className={`contact-content fade-in-up ${visibleSections.contact ? 'visible' : ''}`}>
             <h2>{t('contactTitle')}</h2>
-            <p>{language === 'en' ? 'Interested in performances, collaborations, or lessons?' : 'Interessiert an Auftritten, Zusammenarbeit oder Unterricht?'}</p>
+            <div className="section-underline centered" />
+            <p>{t('contactSubtext')}</p>
             <div className="contact-buttons">
-              <a className="contact-btn primary" href={`mailto:hello@example.com?subject=${encodeURIComponent(language === 'en' ? 'Booking request' : 'Buchungsanfrage')}`}>{t('sendMessage')}</a>
-              <button className="contact-btn secondary" onClick={() => alert(language === 'en' ? 'To schedule, please email hello@example.com' : 'Um zu buchen, senden Sie bitte eine E-Mail an hello@example.com')}>{t('schedule')}</button>
+              <button
+                className="contact-btn primary"
+                onClick={() => setShowModal(true)}
+              >
+                {t('schedule')}
+              </button>
+              <a
+                className="contact-email-link"
+                href={`mailto:event@marcel-marki.com?subject=${encodeURIComponent(t('modalEmailSubject'))}`}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}>
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <polyline points="2,4 12,13 22,4"/>
+                </svg>
+                {t('sendMessage')}
+              </a>
             </div>
             <div className="social-links">
-              <a href="#" className="social-link">Instagram</a>
-              <a href="#" className="social-link">YouTube</a>
-              <a href="#" className="social-link">LinkedIn</a>
+              <a href="#" className="social-link" aria-label="Instagram">
+                <svg className="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+                </svg>
+                <span>Instagram</span>
+              </a>
+              <a href="#" className="social-link" aria-label="TikTok">
+                <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
+                </svg>
+                <span>TikTok</span>
+              </a>
+              <a href="#" className="social-link" aria-label="YouTube">
+                <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.55 3.5 12 3.5 12 3.5s-7.55 0-9.38.55A3.02 3.02 0 0 0 .5 6.19C0 8.03 0 12 0 12s0 3.97.5 5.81a3.02 3.02 0 0 0 2.12 2.14C4.45 20.5 12 20.5 12 20.5s7.55 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14C24 15.97 24 12 24 12s0-3.97-.5-5.81zM9.75 15.52V8.48L15.5 12l-5.75 3.52z"/>
+                </svg>
+                <span>YouTube</span>
+              </a>
+              <a href="#" className="social-link" aria-label="Facebook">
+                <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.49h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/>
+                </svg>
+                <span>Facebook</span>
+              </a>
+              <a href="#" className="social-link" aria-label="LinkedIn">
+                <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.35-1.85 3.59 0 4.25 2.36 4.25 5.43v6.31zM5.34 7.43a2.06 2.06 0 0 1-2.06-2.07 2.06 2.06 0 0 1 2.06-2.06 2.06 2.06 0 0 1 2.07 2.06 2.06 2.06 0 0 1-2.07 2.07zm1.78 13.02H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0z"/>
+                </svg>
+                <span>LinkedIn</span>
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="footer">
-        <p>&copy; 2024 Piano Portfolio. Crafted with passion.</p>
-      </footer>
+      {/* ── Footer ── */}
+      <Footer navigate={navigate} />
+        </>
+      )}
     </div>
   )
 }
