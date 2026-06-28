@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import img2 from './assets/20b48e7f-9b09-4956-ac8c-d47865580434.JPG'
-import img1 from './assets/1D29431A-DB86-4AD8-BC40-D65F2E59666A.JPG'
 import img3 from './assets/DSC02666.JPEG'
+import imgDSC02310 from './assets/DSC02310.JPEG'
+import imgDSC02765 from './assets/DSC02765.JPEG'
+import imgIMG9610 from './assets/IMG_9610.jpg'
+import imgP1 from './assets/1000137652 3.JPG'
+import imgP2 from './assets/1000137656 3.JPG'
+import imgP3 from './assets/1000137658 3.JPG'
 import bgPiano from './assets/blackwhitepiano.jpg'
 import amantelogo from './assets/amante Bern.png'
 import imgKKL from './assets/KKLopenpiano.jpg'
@@ -1181,14 +1186,19 @@ function App() {
           <div className={`section-underline centered fade-in-up ${visibleSections.gallery ? 'visible' : ''}`} />
           {(() => {
             const allPhotos = [
-              { src: img1,            alt: 'Marcel Marki – Live Performance' },
-              { src: imgKKL,          alt: 'KKL Open Piano Night' },
-              { src: img2,            alt: 'Marcel Marki – Piano' },
-              { src: imgBridge,       alt: 'BRIDGE Zürich Piano Nights' },
-              { src: img3,            alt: 'Marcel Marki – Concert' },
-              { src: imgSwiss,        alt: 'Swiss Arbeitgeber Award Show' },
-              { src: imgBernCityPiano,alt: 'Bern City Piano – Café des Artistes' },
-              { src: imgSamigo,       alt: 'Latin Sunset @ SAMIGO' },
+              { src: imgSamigo,       alt: 'Latin Sunset @ SAMIGO' },           // 2026-06-17
+              { src: imgSwiss,        alt: 'Swiss Arbeitgeber Award Show' },     // 2026-01-17
+              { src: img2,            alt: 'Marcel Marki – Piano' },             // 2026-01-17
+              { src: imgIMG9610,      alt: 'Marcel Marki – Performance' },       // 2026-01-12
+              { src: imgKKL,          alt: 'KKL Open Piano Night' },             // 2026-01-11
+              { src: imgDSC02765,     alt: 'Marcel Marki – Live Performance' },  // 2025-12-06
+              { src: img3,            alt: 'Marcel Marki – Concert' },           // 2025-12-06
+              { src: imgBernCityPiano,alt: 'Bern City Piano – Café des Artistes' }, // 2025-11-21
+              { src: imgBridge,       alt: 'BRIDGE Zürich Piano Nights' },       // 2025-11-21
+              { src: imgP3,           alt: 'Marcel Marki – Live Performance' },  // 2025-09-12
+              { src: imgP2,           alt: 'Marcel Marki – Live Performance' },  // 2025-09-12
+              { src: imgP1,           alt: 'Marcel Marki – Live Performance' },  // 2025-09-12
+              { src: imgDSC02310,     alt: 'Marcel Marki – Performance' },       // 2025-09-06
             ]
             const visible = showAllGallery ? allPhotos : allPhotos.slice(0, 4)
             return (
