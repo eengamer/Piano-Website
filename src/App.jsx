@@ -974,7 +974,7 @@ function App() {
                 >
                   <div className="work-image">
                     <img src={work.img} alt={work.title} className="work-img" />
-                    <div className="work-overlay"><span className="work-overlay-note">♪</span></div>
+                    <div className="work-overlay"></div>
                   </div>
                   <div className="work-info">
                     <h3>{work.title}</h3>
