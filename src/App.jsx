@@ -8,8 +8,10 @@ import imgIMG9610 from './assets/IMG_9610.jpg'
 import imgP1 from './assets/1000137652 3.JPG'
 import imgP2 from './assets/1000137656 3.JPG'
 import imgP3 from './assets/1000137658 3.JPG'
-import vid1 from './assets/SAMIGO.MOV'
-import vid2 from './assets/SAMIGO 1.MOV'
+const VIDEOS = [
+  { id: 'WzodCT9Qw4I', title: 'Marcel Marki – Live @ SAMIGO' },
+  { id: 'fbtFVJNG1RQ', title: 'Marcel Marki – Piano Performance' },
+]
 import bgPiano from './assets/blackwhitepiano.jpg'
 import amantelogo from './assets/amante Bern.png'
 import imgKKL from './assets/KKLopenpiano.jpg'
@@ -1193,12 +1195,17 @@ function App() {
           {/* Videos */}
           <h3 className={`gallery-sub-title fade-in-up ${visibleSections.gallery ? 'visible' : ''}`}>{t('galleryVideos')}</h3>
           <div className="gallery-video-grid">
-            {[vid1, vid2].map((src, i) => (
+            {VIDEOS.map((vid, i) => (
               <div key={i} className={`gallery-video-wrap fade-in-up ${visibleSections.gallery ? 'visible' : ''}`} style={{ animationDelay: `${i * 0.15}s` }}>
-                <video controls preload="metadata" className="gallery-video" playsInline>
-                  <source src={src} type="video/mp4" />
-                  <source src={src} type="video/quicktime" />
-                </video>
+                <div className="gallery-video-ratio">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${vid.id}`}
+                    title={vid.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="gallery-video"
+                  />
+                </div>
               </div>
             ))}
           </div>
