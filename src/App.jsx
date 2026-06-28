@@ -548,8 +548,7 @@ function App() {
       parallaxQuote:     '"Music is the language of the soul"',
       /* testimonials */
       testimonialsTitle: 'Testimonials',
-      testimonial1:      'A mesmerising performance — professional and heartfelt.',
-      testimonial2:      'Perfect for our event, very accommodating and talented.',
+      testimonialKatrin: 'Marcel enchanted and enriched my birthday celebration with his wonderful piano music. He played my favourite pieces, the whole preparation and communication were very straightforward — it was definitely a HUGE highlight, merci Marcel!',
       /* gallery */
       galleryTitle:      'Gallery',
       /* contact */
@@ -634,8 +633,7 @@ function App() {
       parallaxQuote:     '„Musik ist die Sprache der Seele"',
       /* testimonials */
       testimonialsTitle: 'Stimmen',
-      testimonial1:      'Eine faszinierende Darbietung — professionell und von Herzen.',
-      testimonial2:      'Perfekt für unsere Veranstaltung, sehr zuvorkommend und talentiert.',
+      testimonialKatrin: 'Marcel hat mit seinen grossartigen Klavierklängen mein Geburtstagsfest verzaubert und bereichert. Er ging auf meine Lieblingsstücke ein, die ganze Vorbereitung und der Austausch waren sehr unkompliziert, es war definitiv ein GROSSSES Highlight, merci Marcel!',
       /* gallery */
       galleryTitle:      'Galerie',
       /* contact */
@@ -981,7 +979,7 @@ function App() {
             },
             {
               isoDate: '2026-06-27',
-              pastTitle: 'Latin Sunset @ SAMIGO', pastLogo: null, pastLogoDark: false, pastVenue: 'Samigo',
+              pastTitle: 'Latin Sunset @ SAMIGO', pastLogo: imgSamigo, pastIsPhoto: true, pastLogoDark: false, pastVenue: 'Samigo',
               type: 'image', img: imgSamigo, imgAlt: 'Latin Sunset @ Samigo',
               date: de ? 'Samstag, 27. Juni 2026' : 'Saturday, 27 June 2026',
               time: de ? 'Tag & Nacht' : 'Day & Night',
@@ -1021,7 +1019,7 @@ function App() {
           const autoMigrated = upcomingDefs
             .filter(ev => new Date(ev.isoDate) < today)
             .sort((a, b) => new Date(b.isoDate) - new Date(a.isoDate))
-            .map(ev => ({ isoDate: ev.isoDate, date: ev.date, title: ev.pastTitle, venue: ev.pastVenue, logo: ev.pastLogo, logoDark: ev.pastLogoDark }))
+            .map(ev => ({ isoDate: ev.isoDate, date: ev.date, title: ev.pastTitle, venue: ev.pastVenue, logo: ev.pastLogo, logoDark: ev.pastLogoDark, isPhoto: !!ev.pastIsPhoto }))
 
           const staticPast = [
             { isoDate: '2026-02-07', date: de ? '7. Februar 2026'   : 'February 7, 2026',   title: 'Piano Moments im Café des Artistes',    venue: 'Bern City Piano', logo: imgBernCityPiano, logoDark: true  },
@@ -1102,9 +1100,9 @@ function App() {
                         className={`past-card fade-in-up ${visibleSections['perf-previous'] ? 'visible' : ''}`}
                         style={{ animationDelay: `${0.08 * i}s` }}
                       >
-                        <div className={`past-logo-wrap${ev.logo ? (ev.logoDark ? ' past-logo-wrap--dark' : ' past-logo-wrap--light') : ' past-logo-wrap--none'}`}>
+                        <div className={`past-logo-wrap${ev.isPhoto ? ' past-logo-wrap--photo' : ev.logo ? (ev.logoDark ? ' past-logo-wrap--dark' : ' past-logo-wrap--light') : ' past-logo-wrap--none'}`}>
                           {ev.logo
-                            ? <img src={ev.logo} alt={ev.title} className="past-logo" />
+                            ? <img src={ev.logo} alt={ev.title} className={ev.isPhoto ? 'past-photo' : 'past-logo'} />
                             : <span className="past-placeholder">♪</span>
                           }
                         </div>
@@ -1149,8 +1147,7 @@ function App() {
           <div className={`section-underline centered fade-in-up ${visibleSections.testimonials ? 'visible' : ''}`} />
           <div className="testimonials-grid">
             {[
-              { key: 'testimonial1', author: 'Anna S.' },
-              { key: 'testimonial2', author: 'K. Meier' },
+              { key: 'testimonialKatrin', author: 'Katrin G.' },
             ].map((item, i) => (
               <div
                 key={i}
@@ -1244,25 +1241,25 @@ function App() {
                 </svg>
                 <span>Instagram</span>
               </a>
-              <a href="#" className="social-link" aria-label="TikTok">
+              <a href="https://www.tiktok.com/@marcel.marki?_r=1&_t=ZN-97Hxzo26vmY" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="TikTok">
                 <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
                 </svg>
                 <span>TikTok</span>
               </a>
-              <a href="#" className="social-link" aria-label="YouTube">
+              <a href="https://www.youtube.com/@marcelmarki" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="YouTube">
                 <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.55 3.5 12 3.5 12 3.5s-7.55 0-9.38.55A3.02 3.02 0 0 0 .5 6.19C0 8.03 0 12 0 12s0 3.97.5 5.81a3.02 3.02 0 0 0 2.12 2.14C4.45 20.5 12 20.5 12 20.5s7.55 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14C24 15.97 24 12 24 12s0-3.97-.5-5.81zM9.75 15.52V8.48L15.5 12l-5.75 3.52z"/>
                 </svg>
                 <span>YouTube</span>
               </a>
-              <a href="#" className="social-link" aria-label="Facebook">
+              <a href="https://www.facebook.com/people/Marcel-Marki/pfbid02wZGuG6nzZ6eCwk7YWxaQbT6bx3uyQrx7gPW4E4TENNSa9dQ4ZbtfVRQdw9hDM3snl/?mibextid=wwXIfr&rdid=websU4FvH0I6qINZ&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F181MxjXPkA%2F%3Fmibextid%3DwwXIfr%26ref%3D1" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Facebook">
                 <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.49h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/>
                 </svg>
                 <span>Facebook</span>
               </a>
-              <a href="#" className="social-link" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/marcel-marki-a410a61b6?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="LinkedIn">
                 <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.35-1.85 3.59 0 4.25 2.36 4.25 5.43v6.31zM5.34 7.43a2.06 2.06 0 0 1-2.06-2.07 2.06 2.06 0 0 1 2.06-2.06 2.06 2.06 0 0 1 2.07 2.06 2.06 2.06 0 0 1-2.07 2.07zm1.78 13.02H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0z"/>
                 </svg>

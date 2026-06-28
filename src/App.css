@@ -1204,6 +1204,8 @@ body::after {
 .past-logo-wrap--light { background: #fff; }
 .past-logo-wrap--dark  { background: var(--bg); }
 .past-logo-wrap--none  { background: rgba(200,169,110,0.05); }
+.past-logo-wrap--photo { padding: 0; overflow: hidden; }
+.past-photo { width: 100%; height: 88px; object-fit: cover; display: block; }
 
 .past-logo {
   max-height: 62px;
