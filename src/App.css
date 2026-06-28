@@ -1502,6 +1502,36 @@ body::after {
   background: var(--bg);
 }
 
+.gallery-sub-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 400;
+  margin-bottom: 1.2rem;
+}
+
+.gallery-video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.gallery-video-wrap {
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  background: #000;
+}
+
+.gallery-video {
+  width: 100%;
+  display: block;
+  max-height: 320px;
+  background: #000;
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

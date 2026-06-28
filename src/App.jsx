@@ -8,6 +8,8 @@ import imgIMG9610 from './assets/IMG_9610.jpg'
 import imgP1 from './assets/1000137652 3.JPG'
 import imgP2 from './assets/1000137656 3.JPG'
 import imgP3 from './assets/1000137658 3.JPG'
+import vid1 from './assets/SAMIGO.MOV'
+import vid2 from './assets/SAMIGO 1.MOV'
 import bgPiano from './assets/blackwhitepiano.jpg'
 import amantelogo from './assets/amante Bern.png'
 import imgKKL from './assets/KKLopenpiano.jpg'
@@ -556,6 +558,8 @@ function App() {
       testimonialKatrin: 'Marcel enchanted and enriched my birthday celebration with his wonderful piano music. He played my favourite pieces, the whole preparation and communication were very straightforward — it was definitely a HUGE highlight, merci Marcel!',
       /* gallery */
       galleryTitle:      'Gallery',
+      galleryVideos:     'Videos',
+      galleryPhotos:     'Photos',
       /* contact */
       contactTitle:      "Let's Connect",
       contactSubtext:    'Interested in performances, collaborations, or lessons?',
@@ -641,6 +645,8 @@ function App() {
       testimonialKatrin: 'Marcel hat mit seinen grossartigen Klavierklängen mein Geburtstagsfest verzaubert und bereichert. Er ging auf meine Lieblingsstücke ein, die ganze Vorbereitung und der Austausch waren sehr unkompliziert, es war definitiv ein GROSSSES Highlight, merci Marcel!',
       /* gallery */
       galleryTitle:      'Galerie',
+      galleryVideos:     'Videos',
+      galleryPhotos:     'Fotos',
       /* contact */
       contactTitle:      'Lass uns in Kontakt treten',
       contactSubtext:    'Interessiert an Auftritten, Zusammenarbeit oder Unterricht?',
@@ -1184,9 +1190,23 @@ function App() {
             {t('galleryTitle')}
           </h2>
           <div className={`section-underline centered fade-in-up ${visibleSections.gallery ? 'visible' : ''}`} />
+          {/* Videos */}
+          <h3 className={`gallery-sub-title fade-in-up ${visibleSections.gallery ? 'visible' : ''}`}>{t('galleryVideos')}</h3>
+          <div className="gallery-video-grid">
+            {[vid1, vid2].map((src, i) => (
+              <div key={i} className={`gallery-video-wrap fade-in-up ${visibleSections.gallery ? 'visible' : ''}`} style={{ animationDelay: `${i * 0.15}s` }}>
+                <video controls preload="metadata" className="gallery-video" playsInline>
+                  <source src={src} type="video/mp4" />
+                  <source src={src} type="video/quicktime" />
+                </video>
+              </div>
+            ))}
+          </div>
+
+          {/* Photos */}
+          <h3 className={`gallery-sub-title fade-in-up ${visibleSections.gallery ? 'visible' : ''}`} style={{ marginTop: '3rem' }}>{t('galleryPhotos')}</h3>
           {(() => {
             const allPhotos = [
-              { src: imgSamigo,       alt: 'Latin Sunset @ SAMIGO' },           // 2026-06-17
               { src: imgSwiss,        alt: 'Swiss Arbeitgeber Award Show' },     // 2026-01-17
               { src: img2,            alt: 'Marcel Marki – Piano' },             // 2026-01-17
               { src: imgIMG9610,      alt: 'Marcel Marki – Performance' },       // 2026-01-12
