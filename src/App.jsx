@@ -1015,11 +1015,20 @@ function App() {
             },
           ]
 
+          const monthsEN = ['January','February','March','April','May','June','July','August','September','October','November','December']
+          const monthsDE = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']
+          const formatPastDate = (iso) => {
+            const d = new Date(iso + 'T12:00:00')
+            return de
+              ? `${d.getDate()}. ${monthsDE[d.getMonth()]} ${d.getFullYear()}`
+              : `${monthsEN[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
+          }
+
           const allUpcoming = upcomingDefs.filter(ev => new Date(ev.isoDate) >= today)
           const autoMigrated = upcomingDefs
             .filter(ev => new Date(ev.isoDate) < today)
             .sort((a, b) => new Date(b.isoDate) - new Date(a.isoDate))
-            .map(ev => ({ isoDate: ev.isoDate, date: ev.date, title: ev.pastTitle, venue: ev.pastVenue, logo: ev.pastLogo, logoDark: ev.pastLogoDark, isPhoto: !!ev.pastIsPhoto }))
+            .map(ev => ({ isoDate: ev.isoDate, date: formatPastDate(ev.isoDate), title: ev.pastTitle, venue: ev.pastVenue, logo: ev.pastLogo, logoDark: ev.pastLogoDark, isPhoto: !!ev.pastIsPhoto }))
 
           const staticPast = [
             { isoDate: '2026-02-07', date: de ? '7. Februar 2026'   : 'February 7, 2026',   title: 'Piano Moments im Café des Artistes',    venue: 'Bern City Piano', logo: imgBernCityPiano, logoDark: true  },
