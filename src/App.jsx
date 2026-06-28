@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import img2 from './assets/20b48e7f-9b09-4956-ac8c-d47865580434.JPG'
 import img3 from './assets/DSC02666.JPEG'
@@ -457,7 +457,7 @@ function ConsultationModal({ onClose, t }) {
 
 /* ─── Main App ─── */
 function App() {
-  const [scrollY, setScrollY]               = useState(0)
+  const parallaxRef                          = useRef(null)
   const [visibleSections, setVisibleSections] = useState({})
   const [isLoading, setIsLoading]           = useState(true)
   const [language, setLanguage]             = useState('en')
@@ -468,6 +468,7 @@ function App() {
   const [showAllUpcoming, setShowAllUpcoming] = useState(false)
   const [showAllPast, setShowAllPast]       = useState(false)
   const [showAllGallery, setShowAllGallery] = useState(false)
+  const [lightboxSrc, setLightboxSrc]       = useState(null)
   const isLegalPage = pageKey !== 'home'
 
   useEffect(() => {
@@ -487,25 +488,35 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (showModal) document.body.style.overflow = 'hidden'
-    else           document.body.style.overflow = ''
+    if (showModal || lightboxSrc) document.body.style.overflow = 'hidden'
+    else                         document.body.style.overflow = ''
     return () => { document.body.style.overflow = '' }
-  }, [showModal])
+  }, [showModal, lightboxSrc])
 
   useEffect(() => {
+    let rafId = null
     const handleScroll = () => {
-      setScrollY(window.scrollY)
-      setNavScrolled(window.scrollY > 60)
-      const sections = document.querySelectorAll('[data-section]')
-      const nv = {}
-      sections.forEach(s => {
-        nv[s.dataset.section] = s.getBoundingClientRect().top < window.innerHeight * 0.78
+      if (rafId) return
+      rafId = requestAnimationFrame(() => {
+        const y = window.scrollY
+        if (parallaxRef.current) parallaxRef.current.style.backgroundPositionY = `${y * 0.5}px`
+        setNavScrolled(prev => { const next = y > 60; return prev === next ? prev : next })
+        const sections = document.querySelectorAll('[data-section]')
+        setVisibleSections(prev => {
+          let changed = false
+          const nv = { ...prev }
+          sections.forEach(s => {
+            const v = s.getBoundingClientRect().top < window.innerHeight * 0.78
+            if (nv[s.dataset.section] !== v) { nv[s.dataset.section] = v; changed = true }
+          })
+          return changed ? nv : prev
+        })
+        rafId = null
       })
-      setVisibleSections(nv)
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => { window.removeEventListener('scroll', handleScroll); if (rafId) cancelAnimationFrame(rafId) }
   }, [])
 
   const translations = {
@@ -1152,7 +1163,7 @@ function App() {
       </div>
 
       {/* ── Parallax quote ── */}
-      <section className="parallax" style={{ backgroundPositionY: `${scrollY * 0.5}px` }}>
+      <section className="parallax" ref={parallaxRef}>
         <div className="parallax-content">
           <span className="parallax-deco" aria-hidden="true">♫</span>
           <h2>{t('parallaxQuote')}</h2>
@@ -1220,7 +1231,7 @@ function App() {
               { src: imgKKL,          alt: 'KKL Open Piano Night' },             // 2026-01-11
               { src: imgDSC02765,     alt: 'Marcel Marki – Live Performance' },  // 2025-12-06
               { src: img3,            alt: 'Marcel Marki – Concert' },           // 2025-12-06
-              { src: imgBernCityPiano,alt: 'Bern City Piano – Café des Artistes' }, // 2025-11-21
+              // imgBernCityPiano removed (logo, not a performance photo)
               { src: imgBridge,       alt: 'BRIDGE Zürich Piano Nights' },       // 2025-11-21
               { src: imgP3,           alt: 'Marcel Marki – Live Performance' },  // 2025-09-12
               { src: imgP2,           alt: 'Marcel Marki – Live Performance' },  // 2025-09-12
@@ -1236,6 +1247,7 @@ function App() {
                       key={i}
                       className={`gallery-item slide-in-up ${visibleSections.gallery ? 'visible' : ''}`}
                       style={{ animationDelay: `${i * 0.08}s` }}
+                      onClick={() => setLightboxSrc(photo.src)}
                     >
                       <img src={photo.src} alt={photo.alt} className="gallery-img" />
                       <div className="gallery-overlay" />
@@ -1318,6 +1330,14 @@ function App() {
 
       {/* ── Footer ── */}
       <Footer navigate={navigate} />
+
+      {/* ── Lightbox ── */}
+      {lightboxSrc && (
+        <div className="lightbox-overlay" onClick={() => setLightboxSrc(null)}>
+          <button className="lightbox-close" onClick={() => setLightboxSrc(null)} aria-label="Close">✕</button>
+          <img src={lightboxSrc} alt="Gallery" className="lightbox-img" onClick={e => e.stopPropagation()} />
+        </div>
+      )}
         </>
       )}
     </div>
