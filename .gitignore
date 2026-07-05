@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Raw video/HEIC source files — not used on the site (videos are embedded from YouTube)
+src/assets/*.MOV
+src/assets/*.HEIC
