@@ -534,6 +534,7 @@ function App() {
       navUpcoming:       'Upcoming Events',
       navPrevious:       'Past Events',
       navTestimonials:   'Testimonials',
+      navPartners:       'Partners',
       navGallery:        'Gallery',
       navContact:        'Contact',
       /* about */
@@ -569,6 +570,18 @@ function App() {
       /* testimonials */
       testimonialsTitle: 'Testimonials',
       testimonialKatrin: 'Marcel enchanted and enriched my birthday celebration with his wonderful piano music. He played my favourite pieces, the whole preparation and communication were very straightforward — it was definitely a HUGE highlight, merci Marcel!',
+      /* partners */
+      partnersTitle:     'Partners & Collaborators',
+      partnersVisit:     'Visit Website',
+      partnerSaraName:   'Sara Anna Walser',
+      partnerSaraRole:   'Violin Duo Partner',
+      partnerSaraDesc:   'Sara is my violin duo partner — together we bring a unique blend of violin and piano to stages across Switzerland, creating performances that are both intimate and powerful.',
+      partnerGlowName:   'Piano Glow',
+      partnerGlowRole:   'Sponsor & Partner',
+      partnerGlowDesc:   'Piano Glow supports my musical journey as a valued sponsor, helping bring live piano experiences to new audiences and events.',
+      partnerBernName:   'Bern City Piano',
+      partnerBernRole:   'Event Partner',
+      partnerBernDesc:   'Bern City Piano organises open piano events throughout Bern, creating spaces where musicians and music lovers can connect and share their passion.',
       /* gallery */
       galleryTitle:      'Gallery',
       galleryVideos:     'Videos',
@@ -621,6 +634,7 @@ function App() {
       navUpcoming:       'Kommende Events',
       navPrevious:       'Vergangene Events',
       navTestimonials:   'Stimmen',
+      navPartners:       'Partner',
       navGallery:        'Galerie',
       navContact:        'Kontakt',
       /* about */
@@ -656,6 +670,18 @@ function App() {
       /* testimonials */
       testimonialsTitle: 'Stimmen',
       testimonialKatrin: 'Marcel hat mit seinen grossartigen Klavierklängen mein Geburtstagsfest verzaubert und bereichert. Er ging auf meine Lieblingsstücke ein, die ganze Vorbereitung und der Austausch waren sehr unkompliziert, es war definitiv ein GROSSSES Highlight, merci Marcel!',
+      /* partners */
+      partnersTitle:     'Partner & Kollaborationen',
+      partnersVisit:     'Website besuchen',
+      partnerSaraName:   'Sara Anna Walser',
+      partnerSaraRole:   'Violine Duo-Partnerin',
+      partnerSaraDesc:   'Sara ist meine Geigen-Duo-Partnerin — gemeinsam bringen wir eine einzigartige Mischung aus Violine und Klavier auf Bühnen in der ganzen Schweiz.',
+      partnerGlowName:   'Piano Glow',
+      partnerGlowRole:   'Sponsor & Partner',
+      partnerGlowDesc:   'Piano Glow unterstützt meine musikalische Reise als geschätzter Sponsor und hilft dabei, Live-Klaviererlebnisse zu neuen Publikum und Veranstaltungen zu bringen.',
+      partnerBernName:   'Bern City Piano',
+      partnerBernRole:   'Veranstaltungspartner',
+      partnerBernDesc:   'Bern City Piano organisiert Open-Piano-Events in ganz Bern und schafft Orte, wo Musiker und Musikliebhaber zusammenkommen und ihre Leidenschaft teilen können.',
       /* gallery */
       galleryTitle:      'Galerie',
       galleryVideos:     'Videos',
@@ -758,6 +784,7 @@ function App() {
       ]
     },
     { id: 'testimonials', key: 'navTestimonials' },
+    { id: 'partners',     key: 'navPartners' },
     { id: 'gallery',      key: 'navGallery' },
     { id: 'contact',      key: 'navContact' },
   ]
@@ -1190,6 +1217,28 @@ function App() {
                 <span className="quote-mark">"</span>
                 <p className="quote">{t(item.key)}</p>
                 <p className="author">— {item.author}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Partners ── */}
+      <section className="partners" data-section="partners">
+        <div className="section-wrap">
+          <h2 className={`section-title fade-in-up ${visibleSections.partners ? 'visible' : ''}`}>{t('partnersTitle')}</h2>
+          <div className={`section-underline centered fade-in-up ${visibleSections.partners ? 'visible' : ''}`} />
+          <div className="partners-grid">
+            {[
+              { nameKey: 'partnerSaraName', roleKey: 'partnerSaraRole', descKey: 'partnerSaraDesc', url: 'https://www.saraannawalser.ch/' },
+              { nameKey: 'partnerGlowName', roleKey: 'partnerGlowRole', descKey: 'partnerGlowDesc', url: 'https://pianoglow.com/en' },
+              { nameKey: 'partnerBernName', roleKey: 'partnerBernRole', descKey: 'partnerBernDesc', url: 'https://berncitypiano.ch/' },
+            ].map((p, i) => (
+              <div key={i} className={`partner-card fade-in-up ${visibleSections.partners ? 'visible' : ''}`} style={{ animationDelay: `${i * 0.15}s` }}>
+                <p className="partner-role">{t(p.roleKey)}</p>
+                <h3 className="partner-name">{t(p.nameKey)}</h3>
+                <p className="partner-desc">{t(p.descKey)}</p>
+                <a href={p.url} target="_blank" rel="noopener noreferrer" className="partner-link">{t('partnersVisit')} →</a>
               </div>
             ))}
           </div>
