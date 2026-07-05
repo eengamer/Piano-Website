@@ -25,6 +25,21 @@ import imgLoebLogo from './assets/loeb logo.png'
 import imgWedding from './assets/wedding.webp'
 import imgBirthday from './assets/birthday.avif'
 
+// Gallery photos, newest → oldest (module scope so the lightbox can navigate them)
+const GALLERY_PHOTOS = [
+  { src: imgSwiss,     alt: 'Swiss Arbeitgeber Award Show' },
+  { src: img2,         alt: 'Marcel Marki – Piano' },
+  { src: imgIMG9610,   alt: 'Marcel Marki – Performance' },
+  { src: imgKKL,       alt: 'KKL Open Piano Night' },
+  { src: imgDSC02765,  alt: 'Marcel Marki – Live Performance' },
+  { src: img3,         alt: 'Marcel Marki – Concert' },
+  { src: imgBridge,    alt: 'BRIDGE Zürich Piano Nights' },
+  { src: imgP3,        alt: 'Marcel Marki – Live Performance' },
+  { src: imgP2,        alt: 'Marcel Marki – Live Performance' },
+  { src: imgP1,        alt: 'Marcel Marki – Live Performance' },
+  { src: imgDSC02310,  alt: 'Marcel Marki – Performance' },
+]
+
 const FLOATING_NOTES = ['♩','♪','♫','♬','♩','♪','♫','♬']
 const SITE_OWNER = 'Marcel Marki'
 const CONTACT_EMAIL = 'event@marcel-marki.com'
@@ -468,7 +483,7 @@ function App() {
   const [showAllUpcoming, setShowAllUpcoming] = useState(false)
   const [showAllPast, setShowAllPast]       = useState(false)
   const [showAllGallery, setShowAllGallery] = useState(false)
-  const [lightboxSrc, setLightboxSrc]       = useState(null)
+  const [lightboxIndex, setLightboxIndex]   = useState(null)
   const [showFloatCta, setShowFloatCta]     = useState(false)
   const isLegalPage = pageKey !== 'home'
 
@@ -489,10 +504,22 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (showModal || lightboxSrc) document.body.style.overflow = 'hidden'
-    else                         document.body.style.overflow = ''
+    if (showModal || lightboxIndex !== null) document.body.style.overflow = 'hidden'
+    else                                      document.body.style.overflow = ''
     return () => { document.body.style.overflow = '' }
-  }, [showModal, lightboxSrc])
+  }, [showModal, lightboxIndex])
+
+  // Keyboard navigation for the gallery lightbox
+  useEffect(() => {
+    if (lightboxIndex === null) return
+    const onKey = (e) => {
+      if (e.key === 'Escape')      setLightboxIndex(null)
+      if (e.key === 'ArrowRight')  setLightboxIndex(i => (i + 1) % GALLERY_PHOTOS.length)
+      if (e.key === 'ArrowLeft')   setLightboxIndex(i => (i - 1 + GALLERY_PHOTOS.length) % GALLERY_PHOTOS.length)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [lightboxIndex])
 
   useEffect(() => {
     // Skip the scroll-driven parallax repaint on touch/low-power/reduced-motion devices
@@ -870,6 +897,12 @@ function App() {
         <div className="floating-notes" aria-hidden="true">
           {FLOATING_NOTES.map((note, i) => (
             <span key={i} className={`floating-note fn-${i + 1}`}>{note}</span>
+          ))}
+        </div>
+
+        <div className="sparkle-field" aria-hidden="true">
+          {Array.from({ length: 16 }).map((_, i) => (
+            <span key={i} className={`sparkle sp-${i + 1}`} />
           ))}
         </div>
 
@@ -1257,21 +1290,7 @@ function App() {
           {/* Photos */}
           <h3 className={`gallery-sub-title fade-in-up ${visibleSections.gallery ? 'visible' : ''}`} style={{ marginTop: '3rem' }}>{t('galleryPhotos')}</h3>
           {(() => {
-            const allPhotos = [
-              { src: imgSwiss,        alt: 'Swiss Arbeitgeber Award Show' },     // 2026-01-17
-              { src: img2,            alt: 'Marcel Marki – Piano' },             // 2026-01-17
-              { src: imgIMG9610,      alt: 'Marcel Marki – Performance' },       // 2026-01-12
-              { src: imgKKL,          alt: 'KKL Open Piano Night' },             // 2026-01-11
-              { src: imgDSC02765,     alt: 'Marcel Marki – Live Performance' },  // 2025-12-06
-              { src: img3,            alt: 'Marcel Marki – Concert' },           // 2025-12-06
-              // imgBernCityPiano removed (logo, not a performance photo)
-              { src: imgBridge,       alt: 'BRIDGE Zürich Piano Nights' },       // 2025-11-21
-              { src: imgP3,           alt: 'Marcel Marki – Live Performance' },  // 2025-09-12
-              { src: imgP2,           alt: 'Marcel Marki – Live Performance' },  // 2025-09-12
-              { src: imgP1,           alt: 'Marcel Marki – Live Performance' },  // 2025-09-12
-              { src: imgDSC02310,     alt: 'Marcel Marki – Performance' },       // 2025-09-06
-            ]
-            const visible = showAllGallery ? allPhotos : allPhotos.slice(0, 4)
+            const visible = showAllGallery ? GALLERY_PHOTOS : GALLERY_PHOTOS.slice(0, 4)
             return (
               <>
                 <div className="gallery-grid">
@@ -1280,7 +1299,7 @@ function App() {
                       key={i}
                       className={`gallery-item slide-in-up ${visibleSections.gallery ? 'visible' : ''}`}
                       style={{ animationDelay: `${i * 0.08}s` }}
-                      onClick={() => setLightboxSrc(photo.src)}
+                      onClick={() => setLightboxIndex(i)}
                     >
                       <img src={photo.src} alt={photo.alt} className="gallery-img" />
                       <div className="gallery-overlay" />
@@ -1402,10 +1421,26 @@ function App() {
       </button>
 
       {/* ── Lightbox ── */}
-      {lightboxSrc && (
-        <div className="lightbox-overlay" onClick={() => setLightboxSrc(null)}>
-          <button className="lightbox-close" onClick={() => setLightboxSrc(null)} aria-label="Close">✕</button>
-          <img src={lightboxSrc} alt="Gallery" className="lightbox-img" onClick={e => e.stopPropagation()} />
+      {lightboxIndex !== null && (
+        <div className="lightbox-overlay" onClick={() => setLightboxIndex(null)}>
+          <button className="lightbox-close" onClick={() => setLightboxIndex(null)} aria-label="Close">✕</button>
+          <button
+            className="lightbox-nav lightbox-prev"
+            onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => (i - 1 + GALLERY_PHOTOS.length) % GALLERY_PHOTOS.length) }}
+            aria-label="Previous"
+          >‹</button>
+          <img
+            src={GALLERY_PHOTOS[lightboxIndex].src}
+            alt={GALLERY_PHOTOS[lightboxIndex].alt}
+            className="lightbox-img"
+            onClick={e => e.stopPropagation()}
+          />
+          <button
+            className="lightbox-nav lightbox-next"
+            onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => (i + 1) % GALLERY_PHOTOS.length) }}
+            aria-label="Next"
+          >›</button>
+          <span className="lightbox-counter">{lightboxIndex + 1} / {GALLERY_PHOTOS.length}</span>
         </div>
       )}
         </>

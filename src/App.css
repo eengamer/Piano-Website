@@ -597,6 +597,48 @@ body::after {
 
 .floating-notes { z-index: 2; }
 
+/* ===== AMBIENT SPARKLES ===== */
+.sparkle-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.sparkle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #f6e8bc;
+  box-shadow: 0 0 6px 1px rgba(246,232,188,0.7), 0 0 12px 2px rgba(200,169,110,0.25);
+  opacity: 0;
+  animation: sparkleTwinkle 4s ease-in-out infinite;
+}
+
+@keyframes sparkleTwinkle {
+  0%, 100% { opacity: 0; transform: scale(0.35); }
+  50%      { opacity: 0.9; transform: scale(1); }
+}
+
+.sp-1  { left: 8%;  top: 20%; width: 2px; height: 2px; animation-delay: 0s;    animation-duration: 3.6s; }
+.sp-2  { left: 20%; top: 68%; animation-delay: 1.4s;  animation-duration: 4.2s; }
+.sp-3  { left: 33%; top: 28%; width: 4px; height: 4px; animation-delay: 2.1s;  animation-duration: 4.8s; }
+.sp-4  { left: 46%; top: 80%; width: 2px; height: 2px; animation-delay: 0.7s;  animation-duration: 3.9s; }
+.sp-5  { left: 58%; top: 24%; animation-delay: 3s;    animation-duration: 4.4s; }
+.sp-6  { left: 71%; top: 66%; width: 4px; height: 4px; animation-delay: 1s;    animation-duration: 5s;   }
+.sp-7  { left: 84%; top: 32%; animation-delay: 2.6s;  animation-duration: 3.7s; }
+.sp-8  { left: 92%; top: 72%; width: 2px; height: 2px; animation-delay: 0.4s;  animation-duration: 4.6s; }
+.sp-9  { left: 12%; top: 46%; animation-delay: 3.4s;  animation-duration: 4.1s; }
+.sp-10 { left: 27%; top: 14%; width: 2px; height: 2px; animation-delay: 1.8s;  animation-duration: 4.9s; }
+.sp-11 { left: 40%; top: 56%; animation-delay: 2.3s;  animation-duration: 3.8s; }
+.sp-12 { left: 53%; top: 42%; width: 4px; height: 4px; animation-delay: 0.9s;  animation-duration: 5.1s; }
+.sp-13 { left: 66%; top: 18%; animation-delay: 3.7s;  animation-duration: 4.3s; }
+.sp-14 { left: 78%; top: 52%; width: 2px; height: 2px; animation-delay: 1.2s;  animation-duration: 4s;   }
+.sp-15 { left: 88%; top: 22%; animation-delay: 2.8s;  animation-duration: 4.7s; }
+.sp-16 { left: 61%; top: 84%; width: 2px; height: 2px; animation-delay: 0.2s;  animation-duration: 3.5s; }
+
 .hero-inner {
   animation: heroReveal 1s cubic-bezier(0.16,1,0.3,1) both;
 }
@@ -626,6 +668,17 @@ body::after {
   line-height: 1.05;
   margin-bottom: 1rem;
   text-shadow: 0 0 80px rgba(200,169,110,0.12), 0 20px 60px rgba(0,0,0,0.6);
+  animation: titleGlow 6s ease-in-out 2.2s infinite;
+}
+
+/* gentle breathing gold glow — keeps the name solid white, adds a subtle shine */
+@keyframes titleGlow {
+  0%, 100% {
+    text-shadow: 0 0 80px rgba(200,169,110,0.12), 0 20px 60px rgba(0,0,0,0.6);
+  }
+  50% {
+    text-shadow: 0 0 70px rgba(255,225,150,0.35), 0 0 26px rgba(200,169,110,0.22), 0 20px 60px rgba(0,0,0,0.6);
+  }
 }
 
 .title-word {
@@ -793,10 +846,34 @@ body::after {
 
 .section-underline {
   width: 48px;
-  height: 1px;
+  height: 2px;
   background: var(--gold);
   margin-bottom: 3rem;
   box-shadow: 0 0 12px rgba(200,169,110,0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+/* one-shot glint travelling along the underline when it reveals */
+.section-underline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 60%;
+  background: linear-gradient(90deg, transparent, rgba(255,250,225,0.95), transparent);
+  opacity: 0;
+}
+
+.section-underline.visible::after {
+  animation: underlineGlint 1.3s ease 0.35s;
+}
+
+@keyframes underlineGlint {
+  0%   { left: -60%; opacity: 0; }
+  25%  { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
 }
 
 .section-underline.centered {
@@ -1192,6 +1269,7 @@ body::after {
   border: 1px solid var(--border-soft);
   border-radius: 4px;
   overflow: hidden;
+  position: relative;
   transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 
@@ -1534,6 +1612,8 @@ body::after {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  position: relative;
+  overflow: hidden;
   transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 
@@ -1589,6 +1669,42 @@ body::after {
 
 @media (max-width: 768px) {
   .partners-grid { grid-template-columns: 1fr; max-width: 420px; }
+}
+
+/* ===== SHARED CARD SHEEN (light sweep on hover — no idle cost) ===== */
+.service-card::before,
+.work-card::before,
+.past-card::before,
+.partner-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent 25%,
+    rgba(255,246,216,0.10) 50%,
+    transparent 75%
+  );
+  transform: skewX(-18deg);
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+}
+
+.service-card:hover::before,
+.work-card:hover::before,
+.past-card:hover::before,
+.partner-card:hover::before {
+  opacity: 1;
+  animation: cardSheen 0.9s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes cardSheen {
+  from { left: -75%; }
+  to   { left: 130%; }
 }
 
 /* ===== GALLERY ===== */
@@ -2311,6 +2427,60 @@ body::after {
   .footer-links { gap: 0.75rem; }
 }
 
+/* ===== MOBILE: horizontal swipe carousels (saves vertical space; desktop untouched) ===== */
+@media (max-width: 768px) {
+  .services-grid,
+  .works-grid,
+  .events-grid,
+  .past-grid,
+  .partners-grid,
+  .gallery-video-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    grid-template-columns: none;
+    max-width: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.9rem;
+    /* bleed to screen edges, keep first/last card aligned to content */
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
+    padding: 0.3rem 1.25rem 1rem;
+    scroll-padding-left: 1.25rem;
+    scrollbar-width: none;
+  }
+
+  .services-grid::-webkit-scrollbar,
+  .works-grid::-webkit-scrollbar,
+  .events-grid::-webkit-scrollbar,
+  .past-grid::-webkit-scrollbar,
+  .partners-grid::-webkit-scrollbar,
+  .gallery-video-grid::-webkit-scrollbar { display: none; }
+
+  .services-grid > *,
+  .works-grid > *,
+  .events-grid > *,
+  .partners-grid > * {
+    scroll-snap-align: start;
+    flex: 0 0 82%;
+    min-width: 0;
+  }
+
+  .past-grid > * {
+    scroll-snap-align: start;
+    flex: 0 0 58%;
+    min-width: 0;
+  }
+
+  .gallery-video-grid > * {
+    scroll-snap-align: center;
+    flex: 0 0 66%;
+    width: auto;
+    min-width: 0;
+  }
+}
+
 @media (max-width: 480px) {
   .hero-title { font-size: clamp(2rem, 14vw, 3.2rem); letter-spacing: 0.04em; }
   .gallery-grid { grid-template-columns: 1fr 1fr; }
@@ -2365,6 +2535,54 @@ body::after {
 .lightbox-close:hover {
   background: rgba(255,255,255,0.1);
   border-color: rgba(255,255,255,0.5);
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 2rem;
+  line-height: 1;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 4px;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  z-index: 1;
+}
+
+.lightbox-prev { left: 1.4rem; }
+.lightbox-next { right: 1.4rem; }
+
+.lightbox-nav:hover {
+  background: rgba(200,169,110,0.25);
+  border-color: rgba(200,169,110,0.6);
+}
+
+.lightbox-prev:hover { transform: translateY(-50%) translateX(-3px); }
+.lightbox-next:hover { transform: translateY(-50%) translateX(3px); }
+
+.lightbox-counter {
+  position: absolute;
+  bottom: 1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.7);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+}
+
+@media (max-width: 768px) {
+  .lightbox-nav { width: 2.6rem; height: 2.6rem; font-size: 1.7rem; }
+  .lightbox-prev { left: 0.6rem; }
+  .lightbox-next { right: 0.6rem; }
 }
 
 /* ===== FLOATING CONSULTATION CTA — persistent, always in reach ===== */
