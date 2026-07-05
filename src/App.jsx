@@ -469,6 +469,7 @@ function App() {
   const [showAllPast, setShowAllPast]       = useState(false)
   const [showAllGallery, setShowAllGallery] = useState(false)
   const [lightboxSrc, setLightboxSrc]       = useState(null)
+  const [showFloatCta, setShowFloatCta]     = useState(false)
   const isLegalPage = pageKey !== 'home'
 
   useEffect(() => {
@@ -494,13 +495,18 @@ function App() {
   }, [showModal, lightboxSrc])
 
   useEffect(() => {
+    // Skip the scroll-driven parallax repaint on touch/low-power/reduced-motion devices
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches
+    const enableParallax = !prefersReduced && !isTouch
     let rafId = null
     const handleScroll = () => {
       if (rafId) return
       rafId = requestAnimationFrame(() => {
         const y = window.scrollY
-        if (parallaxRef.current) parallaxRef.current.style.backgroundPositionY = `${y * 0.5}px`
+        if (enableParallax && parallaxRef.current) parallaxRef.current.style.backgroundPositionY = `${y * 0.5}px`
         setNavScrolled(prev => { const next = y > 60; return prev === next ? prev : next })
+        setShowFloatCta(prev => { const next = y > window.innerHeight * 0.7; return prev === next ? prev : next })
         const sections = document.querySelectorAll('[data-section]')
         setVisibleSections(prev => {
           let changed = false
@@ -575,13 +581,13 @@ function App() {
       partnersVisit:     'Visit Website',
       partnerSaraName:   'Sara Anna Walser',
       partnerSaraRole:   'Violin Duo Partner',
-      partnerSaraDesc:   'Sara is my violin duo partner — together we bring a unique blend of violin and piano to stages across Switzerland, creating performances that are both intimate and powerful.',
+      partnerSaraDesc:   'My violin duo partner — together we perform across Switzerland.',
       partnerGlowName:   'Piano Glow',
       partnerGlowRole:   'Sponsor & Partner',
-      partnerGlowDesc:   'Piano Glow supports my musical journey as a valued sponsor, helping bring live piano experiences to new audiences and events.',
+      partnerGlowDesc:   'A valued sponsor supporting my musical journey.',
       partnerBernName:   'Bern City Piano',
       partnerBernRole:   'Event Partner',
-      partnerBernDesc:   'Bern City Piano organises open piano events throughout Bern, creating spaces where musicians and music lovers can connect and share their passion.',
+      partnerBernDesc:   'Organisers of open piano events across Bern.',
       /* gallery */
       galleryTitle:      'Gallery',
       galleryVideos:     'Videos',
@@ -675,13 +681,13 @@ function App() {
       partnersVisit:     'Website besuchen',
       partnerSaraName:   'Sara Anna Walser',
       partnerSaraRole:   'Violine Duo-Partnerin',
-      partnerSaraDesc:   'Sara ist meine Geigen-Duo-Partnerin — gemeinsam bringen wir eine einzigartige Mischung aus Violine und Klavier auf Bühnen in der ganzen Schweiz.',
+      partnerSaraDesc:   'Meine Geigen-Duo-Partnerin — gemeinsam treten wir in der ganzen Schweiz auf.',
       partnerGlowName:   'Piano Glow',
       partnerGlowRole:   'Sponsor & Partner',
-      partnerGlowDesc:   'Piano Glow unterstützt meine musikalische Reise als geschätzter Sponsor und hilft dabei, Live-Klaviererlebnisse zu neuen Publikum und Veranstaltungen zu bringen.',
+      partnerGlowDesc:   'Ein geschätzter Sponsor, der meine musikalische Reise unterstützt.',
       partnerBernName:   'Bern City Piano',
       partnerBernRole:   'Veranstaltungspartner',
-      partnerBernDesc:   'Bern City Piano organisiert Open-Piano-Events in ganz Bern und schafft Orte, wo Musiker und Musikliebhaber zusammenkommen und ihre Leidenschaft teilen können.',
+      partnerBernDesc:   'Veranstalter von Open-Piano-Events in ganz Bern.',
       /* gallery */
       galleryTitle:      'Galerie',
       galleryVideos:     'Videos',
@@ -784,8 +790,8 @@ function App() {
       ]
     },
     { id: 'testimonials', key: 'navTestimonials' },
-    { id: 'partners',     key: 'navPartners' },
     { id: 'gallery',      key: 'navGallery' },
+    { id: 'partners',     key: 'navPartners' },
     { id: 'contact',      key: 'navContact' },
   ]
 
@@ -1223,28 +1229,6 @@ function App() {
         </div>
       </section>
 
-      {/* ── Partners ── */}
-      <section className="partners" data-section="partners">
-        <div className="section-wrap">
-          <h2 className={`section-title fade-in-up ${visibleSections.partners ? 'visible' : ''}`}>{t('partnersTitle')}</h2>
-          <div className={`section-underline centered fade-in-up ${visibleSections.partners ? 'visible' : ''}`} />
-          <div className="partners-grid">
-            {[
-              { nameKey: 'partnerSaraName', roleKey: 'partnerSaraRole', descKey: 'partnerSaraDesc', url: 'https://www.saraannawalser.ch/' },
-              { nameKey: 'partnerGlowName', roleKey: 'partnerGlowRole', descKey: 'partnerGlowDesc', url: 'https://pianoglow.com/en' },
-              { nameKey: 'partnerBernName', roleKey: 'partnerBernRole', descKey: 'partnerBernDesc', url: 'https://berncitypiano.ch/' },
-            ].map((p, i) => (
-              <div key={i} className={`partner-card fade-in-up ${visibleSections.partners ? 'visible' : ''}`} style={{ animationDelay: `${i * 0.15}s` }}>
-                <p className="partner-role">{t(p.roleKey)}</p>
-                <h3 className="partner-name">{t(p.nameKey)}</h3>
-                <p className="partner-desc">{t(p.descKey)}</p>
-                <a href={p.url} target="_blank" rel="noopener noreferrer" className="partner-link">{t('partnersVisit')} →</a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Gallery ── */}
       <section className="gallery" data-section="gallery">
         <div className="section-wrap">
@@ -1314,6 +1298,28 @@ function App() {
         </div>
       </section>
 
+      {/* ── Partners ── */}
+      <section className="partners" data-section="partners">
+        <div className="section-wrap">
+          <h2 className={`section-title fade-in-up ${visibleSections.partners ? 'visible' : ''}`}>{t('partnersTitle')}</h2>
+          <div className={`section-underline centered fade-in-up ${visibleSections.partners ? 'visible' : ''}`} />
+          <div className="partners-grid">
+            {[
+              { nameKey: 'partnerSaraName', roleKey: 'partnerSaraRole', descKey: 'partnerSaraDesc', url: 'https://www.saraannawalser.ch/' },
+              { nameKey: 'partnerGlowName', roleKey: 'partnerGlowRole', descKey: 'partnerGlowDesc', url: 'https://pianoglow.com/en' },
+              { nameKey: 'partnerBernName', roleKey: 'partnerBernRole', descKey: 'partnerBernDesc', url: 'https://berncitypiano.ch/' },
+            ].map((p, i) => (
+              <div key={i} className={`partner-card fade-in-up ${visibleSections.partners ? 'visible' : ''}`} style={{ animationDelay: `${i * 0.15}s` }}>
+                <p className="partner-role">{t(p.roleKey)}</p>
+                <h3 className="partner-name">{t(p.nameKey)}</h3>
+                <p className="partner-desc">{t(p.descKey)}</p>
+                <a href={p.url} target="_blank" rel="noopener noreferrer" className="partner-link">{t('partnersVisit')} →</a>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Contact ── */}
       <section className="contact" data-section="contact">
         <div className="section-wrap">
@@ -1379,6 +1385,21 @@ function App() {
 
       {/* ── Footer ── */}
       <Footer navigate={navigate} />
+
+      {/* ── Floating consultation CTA (persistent across the site) ── */}
+      <button
+        className={`float-cta ${showFloatCta && !showModal ? 'visible' : ''}`}
+        onClick={() => setShowModal(true)}
+        aria-label={t('schedule')}
+      >
+        <svg className="float-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <rect x="3" y="4.5" width="18" height="16" rx="2"/>
+          <path d="M3 9h18"/>
+          <path d="M8 2.5v4M16 2.5v4"/>
+          <path d="M8.5 14.5l2.2 2.2 4-4.4"/>
+        </svg>
+        <span className="float-cta-text">{t('schedule')}</span>
+      </button>
 
       {/* ── Lightbox ── */}
       {lightboxSrc && (
