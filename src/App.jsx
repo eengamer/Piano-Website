@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
+import { legalTranslations } from './legalTranslations'
+import { languages, additionalTranslations, interfaceTranslations } from './translations'
 import img2 from './assets/20b48e7f-9b09-4956-ac8c-d47865580434.JPG'
+import imgAbout from './assets/about me picture.jpeg'
 import img3 from './assets/DSC02666.JPEG'
 import imgDSC02310 from './assets/DSC02310.JPEG'
 import imgDSC02765 from './assets/DSC02765.JPEG'
@@ -16,6 +19,7 @@ import bgPiano from './assets/blackwhitepiano.jpg'
 import amantelogo from './assets/amante Bern.png'
 import imgKKL from './assets/KKLopenpiano.jpg'
 import imgBridge from './assets/BRIDGEopenpianonights.jpg'
+import imgBridgeLogo from './assets/bridge zurich logo.jpeg'
 import imgSwiss from './assets/Swissarbeitgeber.JPG'
 import imgSamigo from './assets/SAMIGO SUNSET.webp'
 import imgKKLLogo from './assets/KKL logo.png'
@@ -23,10 +27,19 @@ import imgSwissLogo from './assets/Swiss arbeit geber awardshow logo.webp'
 import imgBernCityPiano from './assets/BernCityPiano2.jpg'
 import imgLoebLogo from './assets/loeb logo.png'
 import imgWedding from './assets/wedding.webp'
+import imgSozialpreis from './assets/Sozialpreis__ExtRewriteWyJQTkciLCJ3ZWJwIl0_FillWzkyOCw2ODBd.webp'
 import imgBirthday from './assets/birthday.avif'
+import imgOpenPianoLuzern1 from './assets/open piano luzern 1.jpeg'
+import imgOpenPianoLuzern2 from './assets/open piano luzern 2.jpeg'
+import imgHochzeit111 from './assets/hochzeit 111.jpeg'
+import imgHochzeit112 from './assets/hochzeit 112.jpeg'
 
 // Gallery photos, newest → oldest (module scope so the lightbox can navigate them)
 const GALLERY_PHOTOS = [
+  { src: imgHochzeit111, alt: 'Marcel Marki – Wedding Piano Performance 1' },
+  { src: imgHochzeit112, alt: 'Marcel Marki – Wedding Piano Performance 2' },
+  { src: imgOpenPianoLuzern1, alt: 'Marcel Marki – Open Piano Luzern 1' },
+  { src: imgOpenPianoLuzern2, alt: 'Marcel Marki – Open Piano Luzern 2' },
   { src: imgSwiss,     alt: 'Swiss Arbeitgeber Award Show' },
   { src: img2,         alt: 'Marcel Marki – Piano' },
   { src: imgIMG9610,   alt: 'Marcel Marki – Performance' },
@@ -262,11 +275,12 @@ function setPageMeta(pageKey) {
   description.setAttribute('content', meta.description)
 }
 
-function Footer({ navigate }) {
+function Footer({ navigate, language }) {
+  const legal = legalTranslations[language]
   return (
     <footer className="footer">
       <p className="footer-name">{SITE_OWNER}</p>
-      <nav className="footer-links" aria-label="Legal">
+      <nav className="footer-links" aria-label={legal?.legalLabel ?? 'Legal'}>
         {LEGAL_LINKS.map((link) => (
           <a
             key={link.path}
@@ -276,18 +290,18 @@ function Footer({ navigate }) {
               navigate(link.path)
             }}
           >
-            {link.label}
+            {legal?.[link.path.slice(1)]?.title ?? link.label}
           </a>
         ))}
       </nav>
       <p className="footer-copyright">
-        © 2026 Marcel Marki. All rights reserved. The content of this website, including musical works, arrangements, performances, recordings, videos, photographs, written material, graphics, and designs, may not be copied, reproduced, distributed, publicly performed, used for AI training, or otherwise exploited without the prior written consent of Marcel Marki.
+        {legal?.copyright ?? '© 2026 Marcel Marki. All rights reserved. The content of this website, including musical works, arrangements, performances, recordings, videos, photographs, written material, graphics, and designs, may not be copied, reproduced, distributed, publicly performed, used for AI training, or otherwise exploited without the prior written consent of Marcel Marki.'}
       </p>
     </footer>
   )
 }
 
-function LegalPage({ page, navigate }) {
+function LegalPage({ page, navigate, language }) {
   return (
     <main className="legal-page">
       <div className="legal-bg" aria-hidden="true" />
@@ -330,7 +344,7 @@ function LegalPage({ page, navigate }) {
             navigate('/')
           }}
         >
-          Back to Home
+          {legalTranslations[language]?.backHome ?? 'Back to Home'}
         </a>
       </div>
     </main>
@@ -370,7 +384,7 @@ function ConsultationModal({ onClose, t }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-card" onClick={e => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose} aria-label="Close">×</button>
+        <button className="modal-close" onClick={onClose} aria-label={t('modalClose')}>×</button>
 
         {sent ? (
           <div className="modal-success">
@@ -475,7 +489,14 @@ function App() {
   const parallaxRef                          = useRef(null)
   const [visibleSections, setVisibleSections] = useState({})
   const [isLoading, setIsLoading]           = useState(true)
-  const [language, setLanguage]             = useState('en')
+  const [language, setLanguage]             = useState(() => {
+    try {
+      const saved = localStorage.getItem('site-language')
+      return languages.some(({ code }) => code === saved) ? saved : 'en'
+    } catch {
+      return 'en'
+    }
+  })
   const [navScrolled, setNavScrolled]       = useState(false)
   const [showModal, setShowModal]           = useState(false)
   const [pageKey, setPageKey]               = useState(() => getPathKey(window.location.pathname))
@@ -486,6 +507,15 @@ function App() {
   const [lightboxIndex, setLightboxIndex]   = useState(null)
   const [showFloatCta, setShowFloatCta]     = useState(false)
   const isLegalPage = pageKey !== 'home'
+
+  useEffect(() => {
+    document.documentElement.lang = language
+    try {
+      localStorage.setItem('site-language', language)
+    } catch {
+      // Language switching also works when browser storage is unavailable.
+    }
+  }, [language])
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 3500)
@@ -590,7 +620,6 @@ function App() {
       /* events */
       upcomingTitle:     'Upcoming Events',
       previousTitle:     'Past Events',
-      featuredTitle:     'Featured Performances',
       eventVenueAmante:  'Amante, Belp',
       eventOpenTo:       'Open to everyone',
       eventDiningDesc:   'Join us for an intimate dining evening where I will be performing live piano background music throughout the night. A wonderful opportunity to enjoy fine dining accompanied by live music in a warm, welcoming atmosphere.',
@@ -602,6 +631,7 @@ function App() {
       parallaxQuote:     '"Music is the language of the soul"',
       /* testimonials */
       testimonialsTitle: 'Testimonials',
+      testimonialSandraChris: 'We were absolutely delighted with Marcel and his musical accompaniment at our wedding! With his warm personality and wonderfully selected songs, he created a very special, atmospheric setting and made our day even more unforgettable. We would wholeheartedly recommend Marcel anytime!',
       testimonialKatrin: 'Marcel enchanted and enriched my birthday celebration with his wonderful piano music. He played my favourite pieces, the whole preparation and communication were very straightforward — it was definitely a HUGE highlight, merci Marcel!',
       /* partners */
       partnersTitle:     'Partners & Collaborators',
@@ -690,7 +720,6 @@ function App() {
       /* events */
       upcomingTitle:     'Kommende Events',
       previousTitle:     'Vergangene Events',
-      featuredTitle:     'Ausgewählte Auftritte',
       eventVenueAmante:  'Amante, Belp',
       eventOpenTo:       'Offen für alle',
       eventDiningDesc:   'Begleiten Sie uns an einem stimmungsvollen Dinerabend, bei dem ich live Hintergrundmusik auf dem Klavier spielen werde. Eine wunderbare Gelegenheit, ein feines Dinner mit Live-Klaviermusik in einer einladenden Atmosphäre zu geniessen.',
@@ -702,6 +731,7 @@ function App() {
       parallaxQuote:     '„Musik ist die Sprache der Seele"',
       /* testimonials */
       testimonialsTitle: 'Stimmen',
+      testimonialSandraChris: 'Wir waren rundum begeistert von Marcel und seiner musikalischen Begleitung an unserer Hochzeit! Mit seiner herzlichen Art und den wunderbar ausgewählten Songs hat er für eine ganz besondere und stimmungsvolle Atmosphäre gesorgt und unseren Tag noch unvergesslicher gemacht. Wir würden Marcel jederzeit von Herzen weiterempfehlen!',
       testimonialKatrin: 'Marcel hat mit seinen grossartigen Klavierklängen mein Geburtstagsfest verzaubert und bereichert. Er ging auf meine Lieblingsstücke ein, die ganze Vorbereitung und der Austausch waren sehr unkompliziert, es war definitiv ein GROSSSES Highlight, merci Marcel!',
       /* partners */
       partnersTitle:     'Partner & Kollaborationen',
@@ -755,7 +785,11 @@ function App() {
     }
   }
 
-  const t = (key) => (translations[language]?.[key]) ?? key
+  const t = (key) => additionalTranslations[language]?.[key]
+    ?? interfaceTranslations[language]?.[key]
+    ?? translations[language]?.[key]
+    ?? translations.en[key]
+    ?? key
 
   const navigate = (path) => {
     const targetKey = getPathKey(path)
@@ -781,18 +815,44 @@ function App() {
       <div className="loading-screen" style={{ backgroundImage: `url(${bgPiano})` }}>
         <div className="loading-bg-overlay" />
         <div className="startup-container">
-          <div className="logo-animation">
-            <div className="piano-keyboard">
-              <div className="piano-white-keys">
-                <div className="wkey wk-1" /><div className="wkey wk-2" /><div className="wkey wk-3" />
-                <div className="wkey wk-4" /><div className="wkey wk-5" /><div className="wkey wk-6" />
-                <div className="wkey wk-7" />
-              </div>
-              <div className="piano-black-keys">
-                <div className="bkey bk-1" /><div className="bkey bk-2" /><div className="bkey bk-3" />
-                <div className="bkey bk-4" /><div className="bkey bk-5" />
-              </div>
-            </div>
+          <div className="logo-animation" aria-hidden="true">
+            <svg className="grand-piano" viewBox="15 185 1270 1555" fill="none">
+              <defs>
+                <linearGradient id="piano-gold" x1="160" y1="250" x2="1100" y2="1550" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#a98145" />
+                  <stop offset="0.45" stopColor="#f0d9a5" />
+                  <stop offset="1" stopColor="#b88d50" />
+                </linearGradient>
+              </defs>
+              {/* Contours traced from assets/how-to-draw-Grand-piano-step-14.png.
+                  Keep the reference's perspective and proportions in one SVG coordinate system. */}
+              <g className="piano-line piano-lid">
+                <path pathLength="1" d="M455 642 L876 207 L1162 216 L1168 228 L1043 351 M1168 228 L888 241 L491 649 M876 207 L888 241" />
+                <path pathLength="1" d="M491 649 C558 632 598 657 636 676 C669 691 699 678 703 704 C793 719 861 706 900 681 M936 669 C1057 602 1110 495 1117 411" />
+                <path pathLength="1" d="M992 238 C1063 277 1012 317 1049 364 C1072 395 1223 410 1234 477 C1248 550 1069 658 943 697 M1049 364 C1073 388 1232 408 1234 477" />
+                <path pathLength="1" d="M597 655 C764 660 843 656 884 615 M511 630 L813 550 M558 584 L791 532 M656 484 L814 530 L829 555 L846 555 L830 522 Q823 512 814 530 M846 545 L983 508 Q1007 486 1031 479 C1053 434 1061 396 1049 364" />
+                <path pathLength="1" d="M835 348 L929 661 L980 866 L950 869 L899 665 L817 348 Q817 328 832 333 Q847 338 835 348 Z M899 661 Q913 668 929 661" />
+              </g>
+              <g className="piano-line piano-body">
+                <path pathLength="1" d="M164 748 L354 741 M703 725 C900 701 1136 729 1245 772 Q1265 779 1261 784 C1197 815 1111 797 1085 826 Q1070 835 1091 840 Q1110 854 1052 862 L666 881 L354 779" />
+                <path pathLength="1" d="M354 779 C345 733 379 715 393 678 Q411 632 440 639 Q472 655 491 649 M703 704 Q707 735 690 746 C658 770 665 813 645 852" />
+                <path pathLength="1" d="M164 748 L163 773 L666 917 M175 749 L175 771 M163 773 C178 798 170 860 157 878 C138 900 88 895 61 902 Q48 907 48 921 L48 973 L535 1200 L1030 1162 Q1027 1093 1053 1092 C1092 1094 1104 1084 1099 1038 L1263 979 L1261 784" />
+                <path pathLength="1" d="M163 773 L666 881 C668 925 689 965 658 1041 C644 1079 582 1067 553 1080 Q535 1086 535 1120 L535 1200 M61 972 L61 923 Q60 912 82 911 C119 910 159 903 171 883 C185 860 187 804 176 786 M61 951 L514 1139 L514 1161 L52 1003 L52 974 M666 917 C649 915 649 920 655 944 C664 980 655 1027 630 1049 C609 1067 555 1054 531 1070 Q514 1080 514 1139 M1093 859 L1099 1038 M1014 868 L1025 1128 L540 1163" />
+                <path pathLength="1" d="M91 930 L516 1103 L630 1049 L218 918 Z M91 930 L90 950 L514 1123 M110 933 L533 1096 M150 946 L575 1078 M180 928 L602 1065" />
+                {Array.from({ length: 28 }, (_, i) => {
+                  const t = (i + 1) / 29
+                  return <path key={i} pathLength="1" d={`M${91 + 425 * t} ${930 + 173 * t} L${218 + 412 * t} ${918 + 131 * t} M${91 + 425 * t} ${930 + 173 * t} L${90 + 424 * t} ${950 + 173 * t}`} />
+                })}
+              </g>
+              <g className="piano-line piano-details">
+                <path pathLength="1" d="M252 1089 L276 1400 L293 1414 L333 1407 L345 1132 M276 1386 L293 1395 L333 1390 M293 1110 L293 1414 M1050 1093 L1054 1371 L1077 1395 L1111 1390 L1137 1032 M1054 1371 L1078 1379 L1112 1374 M1077 1100 L1078 1395" />
+                <path pathLength="1" d="M597 1197 Q645 1219 683 1217 Q734 1220 745 1265 L815 1258 Q832 1209 923 1192 L928 1169 M708 1241 L724 1664 L748 1677 L799 1669 L815 1258 M745 1265 L748 1653 L799 1646 M724 1639 L748 1653 M748 1653 L748 1677" />
+                <path pathLength="1" d="M482 1180 L486 1458 L522 1461 L529 1199 M547 1200 L546 1487 L575 1489 L586 1200 M598 1197 L575 1489 M629 1210 L578 1330 M683 1217 L575 1456 M486 1454 L459 1461 L457 1501 L542 1534 L601 1526 L601 1507 L547 1487 M459 1461 L543 1509 L601 1507 M543 1509 L543 1560 L601 1553 L601 1526" />
+                <path pathLength="1" d="M480 1505 C449 1506 407 1492 403 1505 Q398 1518 475 1517 M498 1521 C477 1525 433 1518 429 1529 Q426 1542 499 1533 M522 1535 C492 1537 457 1546 470 1553 Q485 1566 526 1548" />
+                <path pathLength="1" d="M294 1414 C261 1416 262 1453 288 1448 C306 1444 317 1425 305 1416 M290 1424 C277 1427 278 1440 288 1438 L305 1416 M1074 1395 C1046 1399 1041 1431 1065 1433 C1086 1435 1098 1408 1084 1397 M1071 1404 C1059 1411 1059 1425 1069 1421 L1084 1397 M748 1677 C717 1677 715 1713 736 1718 C759 1724 780 1689 765 1680 M745 1686 C731 1690 730 1710 741 1707 L765 1680" />
+              </g>
+              <path className="piano-ground" d="M233 1730 Q680 1750 1133 1730" />
+            </svg>
           </div>
           <h1 className="startup-title">Marcel Marki</h1>
           <p className="startup-subtitle">{t('heroSubtitle')}</p>
@@ -871,17 +931,24 @@ function App() {
             ))}
           </ul>
           <div className="nav-actions">
-            <button className="nav-lang" onClick={() => setLanguage(language === 'en' ? 'de' : 'en')}>
-              {language === 'en' ? 'DE' : 'EN'}
-            </button>
+            <select
+              className="nav-lang"
+              aria-label={t('languageLabel')}
+              value={language}
+              onChange={(event) => setLanguage(event.target.value)}
+            >
+              {languages.map(({ code, label }) => (
+                <option key={code} value={code} lang={code}>{label}</option>
+              ))}
+            </select>
           </div>
         </nav>
       </header>
 
       {isLegalPage ? (
         <>
-          <LegalPage page={LEGAL_PAGES[pageKey]} navigate={navigate} />
-          <Footer navigate={navigate} />
+          <LegalPage page={legalTranslations[language]?.[pageKey] ?? LEGAL_PAGES[pageKey]} navigate={navigate} language={language} />
+          <Footer navigate={navigate} language={language} />
         </>
       ) : (
         <>
@@ -956,7 +1023,7 @@ function App() {
           </div>
           <div className={`about-image slide-in-right ${visibleSections.about ? 'visible' : ''}`}>
             <div className="image-frame">
-              <img src={img2} alt="Piano performance" className="about-img" />
+              <img src={imgAbout} alt={t('aboutImageAlt')} className="about-img" />
             </div>
           </div>
         </div>
@@ -1054,25 +1121,38 @@ function App() {
 
         {/* Upcoming + Past Events (auto-migration) */}
         {(() => {
-          const de = language === 'de'
+          const formatDate = (iso, weekday = false) => new Intl.DateTimeFormat(language, {
+            year: 'numeric', month: 'long', day: 'numeric',
+            ...(weekday ? { weekday: 'long' } : {}),
+          }).format(new Date(iso + 'T12:00:00'))
           const today = new Date(); today.setHours(0, 0, 0, 0)
 
           const upcomingDefs = [
             {
+              isoDate: '2026-10-02', ongoing: true,
+              pastTitle: 'BRIDGE Zürich Piano Nights', pastLogo: imgBridgeLogo, pastLogoDark: false, pastVenue: 'BRIDGE Zürich',
+              type: 'logo', logo: imgBridgeLogo, logoAlt: 'BRIDGE Zürich logo', logoLight: true,
+              date: `${t('eventStarts')} ${formatDate('2026-10-02', true)}`,
+              time: t('eventEveryFridayOngoing'),
+              venue: 'BRIDGE Zürich Piano Nights',
+              desc: t('eventBridgeDesc'),
+              websiteUrl: 'https://www.bridgezurich.ch/',
+            },
+            {
               isoDate: '2026-06-26',
-              pastTitle: de ? 'Private Hochzeit' : 'Private Wedding', pastLogo: imgWedding, pastLogoDark: false, pastVenue: '',
+              pastTitle: t('eventPrivateWedding'), pastLogo: imgWedding, pastLogoDark: false, pastVenue: '',
               type: 'logo', logo: imgWedding, logoAlt: 'Wedding', logoLight: true,
-              date: de ? 'Freitag, 26. Juni 2026' : 'Friday, 26 June 2026',
-              time: de ? 'Privat' : 'Private',
-              venue: de ? 'Private Hochzeit' : 'Private Wedding',
-              desc: de ? 'Ein unvergesslicher Abend mit live Klaviermusik für einen besonderen Hochzeitstag.' : 'An unforgettable evening of live piano music for a very special wedding day.',
+              date: formatDate('2026-06-26', true),
+              time: t('eventPrivate'),
+              venue: t('eventPrivateWedding'),
+              desc: t('eventWeddingDesc'),
             },
             {
               isoDate: '2026-06-27',
               pastTitle: 'Latin Sunset @ SAMIGO', pastLogo: imgSamigo, pastIsPhoto: true, pastLogoDark: false, pastVenue: 'Samigo',
               type: 'image', img: imgSamigo, imgAlt: 'Latin Sunset @ Samigo',
-              date: de ? 'Samstag, 27. Juni 2026' : 'Saturday, 27 June 2026',
-              time: de ? 'Tag & Nacht' : 'Day & Night',
+              date: formatDate('2026-06-27', true),
+              time: t('eventDayNight'),
               venue: 'Samigo',
               desc: t('eventSamigoDesc'),
               ticketUrl: 'https://eventfrog.ch/de/p/partys/latin-brasil/latin-sunset-day-and-nightparty-samigo-7467879824339538144.html',
@@ -1080,54 +1160,49 @@ function App() {
             },
             {
               isoDate: '2026-07-10',
-              pastTitle: de ? 'Private Hochzeit' : 'Private Wedding', pastLogo: imgWedding, pastLogoDark: false, pastVenue: '',
+              pastTitle: t('eventPrivateWedding'), pastLogo: imgWedding, pastLogoDark: false, pastVenue: '',
               type: 'logo', logo: imgWedding, logoAlt: 'Wedding', logoLight: true,
-              date: de ? 'Freitag, 10. Juli 2026' : 'Friday, 10 July 2026',
-              time: de ? 'Privat' : 'Private',
-              venue: de ? 'Private Hochzeit' : 'Private Wedding',
-              desc: de ? 'Ein unvergesslicher Abend mit live Klaviermusik für einen besonderen Hochzeitstag.' : 'An unforgettable evening of live piano music for a very special wedding day.',
+              date: formatDate('2026-07-10', true),
+              time: t('eventPrivate'),
+              venue: t('eventPrivateWedding'),
+              desc: t('eventWeddingDesc'),
             },
             {
               isoDate: '2026-11-10',
-              pastTitle: de ? 'Amante Belp Dining Evening' : 'Amante Belp Dining Evening', pastLogo: amantelogo, pastLogoDark: false, pastVenue: 'Amante Belp',
+              pastTitle: t('eventDiningTitle'), pastLogo: amantelogo, pastLogoDark: false, pastVenue: 'Amante Belp',
               type: 'logo', logo: amantelogo, logoAlt: 'Amante Belp', logoLight: true,
-              date: de ? 'Dienstag, 10. November 2026' : 'Tuesday, 10 November 2026',
+              date: formatDate('2026-11-10', true),
               time: '18:00 – 21:00', venue: t('eventVenueAmante'),
               desc: t('eventDiningDesc'), badge: t('eventOpenTo'),
             },
             {
               isoDate: '2026-12-22',
-              pastTitle: de ? 'Amante Belp Dining Evening' : 'Amante Belp Dining Evening', pastLogo: amantelogo, pastLogoDark: false, pastVenue: 'Amante Belp',
+              pastTitle: t('eventDiningTitle'), pastLogo: amantelogo, pastLogoDark: false, pastVenue: 'Amante Belp',
               type: 'logo', logo: amantelogo, logoAlt: 'Amante Belp', logoLight: true,
-              date: de ? 'Dienstag, 22. Dezember 2026' : 'Tuesday, 22 December 2026',
+              date: formatDate('2026-12-22', true),
               time: '18:00 – 21:00', venue: t('eventVenueAmante'),
               desc: t('eventDiningDesc'), badge: t('eventOpenTo'),
             },
           ]
 
-          const monthsEN = ['January','February','March','April','May','June','July','August','September','October','November','December']
-          const monthsDE = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember']
-          const formatPastDate = (iso) => {
-            const d = new Date(iso + 'T12:00:00')
-            return de
-              ? `${d.getDate()}. ${monthsDE[d.getMonth()]} ${d.getFullYear()}`
-              : `${monthsEN[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
-          }
-
-          const allUpcoming = upcomingDefs.filter(ev => new Date(ev.isoDate) >= today)
+          const allUpcoming = upcomingDefs
+            .filter(ev => ev.ongoing || new Date(ev.isoDate) >= today)
+            .sort((a, b) => new Date(a.isoDate) - new Date(b.isoDate))
           const autoMigrated = upcomingDefs
-            .filter(ev => new Date(ev.isoDate) < today)
+            .filter(ev => !ev.ongoing && new Date(ev.isoDate) < today)
             .sort((a, b) => new Date(b.isoDate) - new Date(a.isoDate))
-            .map(ev => ({ isoDate: ev.isoDate, date: formatPastDate(ev.isoDate), title: ev.pastTitle, venue: ev.pastVenue, logo: ev.pastLogo, logoDark: ev.pastLogoDark, isPhoto: !!ev.pastIsPhoto }))
+            .map(ev => ({ isoDate: ev.isoDate, date: formatDate(ev.isoDate), title: ev.pastTitle, venue: ev.pastVenue, logo: ev.pastLogo, logoDark: ev.pastLogoDark, isPhoto: !!ev.pastIsPhoto }))
 
           const staticPast = [
-            { isoDate: '2026-02-07', date: de ? '7. Februar 2026'   : 'February 7, 2026',   title: 'Piano Moments im Café des Artistes',    venue: 'Bern City Piano', logo: imgBernCityPiano, logoDark: true  },
-            { isoDate: '2026-01-15', date: de ? '15. Januar 2026'   : 'January 15, 2026',   title: 'Swiss Arbeitgeber Award Show',           venue: '',                logo: imgSwissLogo,     logoDark: false },
-            { isoDate: '2026-01-11', date: de ? '11. Januar 2026'   : 'January 11, 2026',   title: 'KKL Open Piano Night',                   venue: 'KKL Luzern',      logo: imgKKLLogo,       logoDark: false },
-            { isoDate: '2025-12-27', date: de ? '27. Dezember 2025' : 'December 27, 2025',  title: 'Loeb Open Piano Moments',                venue: 'Loeb, Bern',      logo: imgLoebLogo,      logoDark: false },
-            { isoDate: '2025-12-21', date: de ? '21. Dezember 2025' : 'December 21, 2025',  title: 'Loeb Open Piano Moments',                venue: 'Loeb, Bern',      logo: imgLoebLogo,      logoDark: false },
-            { isoDate: '2025-09-13', date: de ? '13. September 2025': 'September 13, 2025', title: de ? 'Privater Geburtstag' : 'Private Birthday', venue: '',          logo: imgBirthday,      logoDark: false },
-            { isoDate: '2025-08-16', date: de ? '16. August 2025'   : 'August 16, 2025',    title: de ? 'Private Hochzeit' : 'Private Wedding', venue: '',             logo: imgWedding,       logoDark: false },
+            { isoDate: '2026-09-25', date: formatDate('2026-09-25'), title: t('eventPrivateWedding'), venue: '', logo: imgWedding, logoDark: false },
+            { isoDate: '2026-09-17', date: formatDate('2026-09-17'), title: 'Solothurner Sozialpreis Verleihung', venue: '', logo: imgSozialpreis, logoDark: false },
+            { isoDate: '2026-02-07', date: formatDate('2026-02-07', false),   title: 'Piano Moments im Café des Artistes',    venue: 'Bern City Piano', logo: imgBernCityPiano, logoDark: true  },
+            { isoDate: '2026-01-15', date: formatDate('2026-01-15', false),   title: 'Swiss Arbeitgeber Award Show',           venue: '',                logo: imgSwissLogo,     logoDark: false },
+            { isoDate: '2026-01-11', date: formatDate('2026-01-11', false),   title: 'KKL Open Piano Night',                   venue: 'KKL Luzern',      logo: imgKKLLogo,       logoDark: false },
+            { isoDate: '2025-12-27', date: formatDate('2025-12-27', false),  title: 'Loeb Open Piano Moments',                venue: 'Loeb, Bern',      logo: imgLoebLogo,      logoDark: false },
+            { isoDate: '2025-12-21', date: formatDate('2025-12-21', false),  title: 'Loeb Open Piano Moments',                venue: 'Loeb, Bern',      logo: imgLoebLogo,      logoDark: false },
+            { isoDate: '2025-09-13', date: formatDate('2025-09-13', false), title: t('eventPrivateBirthday'), venue: '',          logo: imgBirthday,      logoDark: false },
+            { isoDate: '2025-08-16', date: formatDate('2025-08-16', false),    title: t('eventPrivateWedding'), venue: '',             logo: imgWedding,       logoDark: false },
           ]
 
           const allPast = [...autoMigrated, ...staticPast].sort((a, b) => new Date(b.isoDate) - new Date(a.isoDate))
@@ -1169,6 +1244,11 @@ function App() {
                           {ev.ticketUrl && (
                             <a href={ev.ticketUrl} target="_blank" rel="noopener noreferrer" className="event-ticket-link">
                               🎟 {ev.ticketLabel}
+                            </a>
+                          )}
+                          {ev.websiteUrl && (
+                            <a href={ev.websiteUrl} target="_blank" rel="noopener noreferrer" className="event-ticket-link">
+                              {t('eventWebsite')}
                             </a>
                           )}
                           {ev.badge && <span className="event-badge">{ev.badge}</span>}
@@ -1247,6 +1327,7 @@ function App() {
           <div className="testimonials-grid">
             {[
               { key: 'testimonialKatrin', author: 'Katrin G.' },
+              { key: 'testimonialSandraChris', author: 'Sandra & Chris N.' },
             ].map((item, i) => (
               <div
                 key={i}
@@ -1403,7 +1484,7 @@ function App() {
       </section>
 
       {/* ── Footer ── */}
-      <Footer navigate={navigate} />
+      <Footer navigate={navigate} language={language} />
 
       {/* ── Floating consultation CTA (persistent across the site) ── */}
       <button
@@ -1423,11 +1504,11 @@ function App() {
       {/* ── Lightbox ── */}
       {lightboxIndex !== null && (
         <div className="lightbox-overlay" onClick={() => setLightboxIndex(null)}>
-          <button className="lightbox-close" onClick={() => setLightboxIndex(null)} aria-label="Close">✕</button>
+          <button className="lightbox-close" onClick={() => setLightboxIndex(null)} aria-label={t('modalClose')}>✕</button>
           <button
             className="lightbox-nav lightbox-prev"
             onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => (i - 1 + GALLERY_PHOTOS.length) % GALLERY_PHOTOS.length) }}
-            aria-label="Previous"
+            aria-label={t('previousPhoto')}
           >‹</button>
           <img
             src={GALLERY_PHOTOS[lightboxIndex].src}
@@ -1438,7 +1519,7 @@ function App() {
           <button
             className="lightbox-nav lightbox-next"
             onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => (i + 1) % GALLERY_PHOTOS.length) }}
-            aria-label="Next"
+            aria-label={t('nextPhoto')}
           >›</button>
           <span className="lightbox-counter">{lightboxIndex + 1} / {GALLERY_PHOTOS.length}</span>
         </div>

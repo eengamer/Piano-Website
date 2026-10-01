@@ -108,152 +108,58 @@ body::after {
 }
 
 .logo-animation {
-  margin-bottom: 2.5rem;
-  animation: float 3.2s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-14px); }
-}
-
-/* ===== REALISTIC PIANO KEYBOARD ===== */
-.piano-keyboard {
-  position: relative;
-  width: 266px; /* 7 white keys × 38px */
-  height: 130px;
-  margin: 0 auto;
-  user-select: none;
-}
-
-.piano-white-keys {
-  display: flex;
-  gap: 3px;
-  width: 100%;
-  height: 100%;
-}
-
-.wkey {
-  flex: 1;
-  height: 100%;
-  background: linear-gradient(180deg, #f5f1eb 0%, #ddd8ce 60%, #c8c2b6 100%);
-  border-radius: 0 0 5px 5px;
-  border: 1px solid rgba(100,90,70,0.35);
-  border-top: none;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.7), inset -1px 0 0 rgba(0,0,0,0.06);
-  animation: whiteKeyPlay 4s ease-in-out infinite;
+  width: min(250px, 64vw, 32svh);
+  margin: 0 auto 1.5rem;
   position: relative;
 }
 
-.wkey::after {
+.logo-animation::before {
   content: '';
   position: absolute;
-  left: 0; right: 0;
-  top: 0; bottom: 0;
-  background: linear-gradient(90deg, rgba(255,255,255,0.22) 0%, transparent 55%);
-  border-radius: inherit;
-  pointer-events: none;
+  inset: 15% -10% 0;
+  background: radial-gradient(ellipse, rgba(200, 169, 110, 0.12), transparent 68%);
+  opacity: 0;
+  animation: pianoAtmosphere 1.2s ease-out 1.2s forwards;
 }
 
-.wk-1 { animation-delay: 0s; }
-.wk-2 { animation-delay: 0.18s; }
-.wk-3 { animation-delay: 0.36s; }
-.wk-4 { animation-delay: 0.54s; }
-.wk-5 { animation-delay: 0.72s; }
-.wk-6 { animation-delay: 0.54s; }
-.wk-7 { animation-delay: 0.36s; }
-
-@keyframes whiteKeyPlay {
-  0%, 100% {
-    transform: scaleY(1);
-    transform-origin: top;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.7);
-  }
-  40% {
-    transform: scaleY(0.96);
-    transform-origin: top;
-    background: linear-gradient(180deg, #fffdf8 0%, #eae6df 60%, #d8d2c8 100%);
-    box-shadow: 0 10px 28px rgba(200,169,110,0.4), inset 0 2px 4px rgba(255,255,255,0.8);
-    border-color: rgba(200,169,110,0.5);
-  }
-  55% {
-    transform: scaleY(0.94);
-    transform-origin: top;
-    background: linear-gradient(180deg, #ffffff 0%, #f0ece4 60%, #e0dace 100%);
-    box-shadow: 0 12px 36px rgba(200,169,110,0.6), 0 0 22px rgba(200,169,110,0.18);
-    border-color: rgba(200,169,110,0.7);
-  }
-}
-
-/* Black keys positioned absolutely over white keys */
-/* White key width = (266 - 6×3) / 7 = (266-18)/7 = 248/7 ≈ 35.4px, gap=3px, so pitch = 38.4px */
-.piano-black-keys {
-  position: absolute;
-  top: 0;
-  left: 0;
+.grand-piano {
+  display: block;
   width: 100%;
-  height: 62%;
-  pointer-events: none;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 0 7px rgba(200, 169, 110, 0.2));
 }
 
-.bkey {
-  position: absolute;
-  top: 0;
-  width: 22px;
-  height: 100%;
-  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 55%, #1f1a12 100%);
-  border-radius: 0 0 4px 4px;
-  box-shadow: 2px 6px 16px rgba(0,0,0,0.8), inset -1px 0 0 rgba(255,255,255,0.06), inset 1px 0 0 rgba(255,255,255,0.04);
-  z-index: 2;
-  animation: blackKeyPlay 4s ease-in-out infinite;
-  transform: translateX(-50%);
+.piano-line {
+  stroke: url(#piano-gold);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.bkey::after {
-  content: '';
-  position: absolute;
-  left: 2px; right: 2px;
-  top: 4px; height: 40%;
-  background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
-  border-radius: 2px;
-  pointer-events: none;
+.piano-line path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: drawPiano 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Black key positions: after wk-1 (C#), wk-2 (D#), wk-4 (F#), wk-5 (G#), wk-6 (A#) */
-/* Each white key occupies (266 + 3×6)/7 — simpler: left = (n * 38.4) - 11px */
-/* wk-1 ends at ~38.4px, bk-1 center at ~27px */
-/* Gap centers: key width = (266-18)/7 = 35.43px, pitch = 38.43px, gap = 3px.
-   Gap-n center = n*38.43 - 1.5 → precise, even spacing (translateX -50% centers each key). */
-.bk-1 { left: 36.93px; }    /* C# between wk1 and wk2 */
-.bk-2 { left: 75.36px; }    /* D# between wk2 and wk3 */
-.bk-3 { left: 152.21px; }   /* F# between wk4 and wk5 */
-.bk-4 { left: 190.64px; }   /* G# between wk5 and wk6 */
-.bk-5 { left: 229.07px; }   /* A# between wk6 and wk7 */
+.piano-body path { animation-delay: 0.35s; }
+.piano-details path { animation-delay: 0.85s; animation-duration: 1.1s; }
 
-@keyframes blackKeyPlay {
-  0%, 100% {
-    transform: translateX(-50%) translateY(0) scaleY(1);
-    transform-origin: top;
-  }
-  40% {
-    transform: translateX(-50%) translateY(2px) scaleY(0.97);
-    transform-origin: top;
-    background: linear-gradient(180deg, #252015 0%, #0f0e0a 55%, #2a2010 100%);
-    box-shadow: 2px 8px 22px rgba(200,169,110,0.3), inset -1px 0 0 rgba(255,255,255,0.08);
-  }
-  55% {
-    transform: translateX(-50%) translateY(3px) scaleY(0.96);
-    transform-origin: top;
-    box-shadow: 2px 10px 28px rgba(200,169,110,0.45), 0 0 14px rgba(200,169,110,0.15);
-  }
+.piano-ground {
+  stroke: var(--gold);
+  stroke-width: 2;
+  opacity: 0;
+  animation: pianoAtmosphere 1s ease-out 1.7s forwards;
 }
 
-/* stagger black keys slightly offset from white keys */
-.bk-1 { animation-delay: 0.09s; }
-.bk-2 { animation-delay: 0.27s; }
-.bk-3 { animation-delay: 0.45s; }
-.bk-4 { animation-delay: 0.63s; }
-.bk-5 { animation-delay: 0.45s; }
+@keyframes drawPiano {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes pianoAtmosphere {
+  to { opacity: 0.65; }
+}
 
 .startup-title {
   font-family: var(--font-name);
@@ -322,30 +228,12 @@ body::after {
 @keyframes progressBar { to { width: 100%; } }
 
 .loading-bar.music-bar {
-  width: 320px;
+  width: min(280px, 76vw);
   height: 1px;
 }
 
 .loading-bar.music-bar .loading-progress {
   box-shadow: 0 0 12px rgba(200,169,110,0.6);
-}
-
-.loading-bar.music-bar::after {
-  content: '♪';
-  position: absolute;
-  right: 8px;
-  top: -20px;
-  color: var(--gold);
-  font-size: 18px;
-  opacity: 0.9;
-  animation: floatNote 2s ease-in-out infinite;
-  animation-delay: 1.4s;
-}
-
-@keyframes floatNote {
-  0%   { transform: translateY(0) translateX(0); opacity: 0.9; }
-  50%  { transform: translateY(-12px) translateX(-40px); opacity: 0.5; }
-  100% { transform: translateY(0) translateX(0); opacity: 0.9; }
 }
 
 /* ===== TOPBAR ===== */
@@ -436,7 +324,7 @@ body::after {
 
 .nav-link:hover { color: var(--gold); }
 
-.nav-actions { display: flex; gap: 0.5rem; align-items: center; }
+.nav-actions { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; }
 
 /* ── Nav dropdown ── */
 .nav-has-dropdown { position: relative; }
@@ -516,6 +404,9 @@ body::after {
 }
 
 .nav-lang:hover { color: var(--gold); border-color: var(--gold); }
+
+.nav-lang:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.nav-lang option { background: #141414; color: #f5f0e8; }
 
 /* ===== HERO ===== */
 .hero {
@@ -994,16 +885,16 @@ body::after {
   height: 100%;
   min-height: 340px;
   object-fit: cover;
-  object-position: 65% 20%;
+  object-position: 50% 50%;
   border-radius: 2px;
   display: block;
   position: relative;
   z-index: 1;
-  filter: grayscale(0.15) contrast(1.06);
+  filter: sepia(0.12) brightness(0.88) contrast(1.02);
   transition: filter 0.5s;
 }
 
-.about-img:hover { filter: grayscale(0) contrast(1.08); }
+.about-img:hover { filter: sepia(0.12) brightness(0.92) contrast(1.02); }
 
 /* ===== SERVICES ===== */
 .services {
@@ -2388,7 +2279,7 @@ body::after {
 
   .nav-brand { font-size: 0.65rem; }
 
-  .nav-list { gap: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav-list { gap: 0; min-width: 0; overflow-x: auto; scrollbar-width: none; }
   .nav-list::-webkit-scrollbar { display: none; }
 
   .nav-link { padding: 0.5rem 0.6rem; font-size: 0.7rem; white-space: nowrap; }
@@ -2654,7 +2545,14 @@ body::after {
     transform: none !important;
   }
 
-  /* Stop the looping piano-key animation */
-  .wkey,
-  .bkey { animation: none !important; }
+  .piano-line path {
+    animation: none !important;
+    stroke-dashoffset: 0;
+  }
+
+  .logo-animation::before,
+  .piano-ground {
+    animation: none !important;
+    opacity: 0.65;
+  }
 }
